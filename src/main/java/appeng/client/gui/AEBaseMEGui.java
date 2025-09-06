@@ -19,6 +19,7 @@
 package appeng.client.gui;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,7 +27,10 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 
+import appeng.api.storage.data.IAEFluidStack;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.client.me.SlotME;
 import appeng.container.slot.AppEngSlot;
@@ -34,6 +38,8 @@ import appeng.container.slot.SlotPlayerHotBar;
 import appeng.container.slot.SlotPlayerInv;
 import appeng.core.AEConfig;
 import appeng.core.localization.ButtonToolTips;
+import appeng.fluids.container.slots.IMEFluidSlot;
+import appeng.util.Platform;
 
 public abstract class AEBaseMEGui extends AEBaseGui {
 
@@ -45,11 +51,29 @@ public abstract class AEBaseMEGui extends AEBaseGui {
     protected void renderToolTip(final ItemStack stack, final int x, final int y) {
         final Slot s = this.getSlot(x, y);
 
+        if (this.renderItemToolTip(stack, x, y, s)) {
+            return;
+        }
+
+        if (this.renderFluidToolTip(x, y, s)) {
+            return;
+        }
+
+        super.renderToolTip(stack, x, y);
+    }
+
+    /**
+     * Renders the tooltip for an item stack. Returns true if the tooltip was rendered, false otherwise.
+     */
+    private boolean renderItemToolTip(final ItemStack stack, final int x, final int y, final Slot s) {
+        if (stack.isEmpty()) {
+            return false;
+        }
+
         final int bigNumber = AEConfig.instance().useTerminalUseLargeFont() ? 999 : 9999;
         final List<String> currentToolTip = this.getItemToolTip(stack);
 
-        if (s instanceof SlotME && !stack.isEmpty()) {
-
+        if (s instanceof SlotME) {
             IAEItemStack myStack = null;
 
             try {
@@ -83,8 +107,7 @@ public abstract class AEBaseMEGui extends AEBaseGui {
                 }
 
                 this.drawHoveringText(currentToolTip, x, y, this.fontRenderer);
-
-                return;
+                return true;
             } else if (stack.getCount() > bigNumber) {
                 final String local = ButtonToolTips.ItemsStored.getLocal();
                 final String formattedAmount = NumberFormat.getNumberInstance(Locale.US).format(stack.getCount());
@@ -93,8 +116,7 @@ public abstract class AEBaseMEGui extends AEBaseGui {
                 currentToolTip.add(TextFormatting.GRAY + format);
 
                 this.drawHoveringText(currentToolTip, x, y, this.fontRenderer);
-
-                return;
+                return true;
             }
         } else if (s instanceof AppEngSlot) {
             if (!(s instanceof SlotPlayerInv) && !(s instanceof SlotPlayerHotBar)) {
@@ -103,11 +125,42 @@ public abstract class AEBaseMEGui extends AEBaseGui {
                             .format(s.getStack().getCount());
                     currentToolTip.add(TextFormatting.GRAY + formattedAmount);
                     this.drawHoveringText(currentToolTip, x, y, this.fontRenderer);
-                    return;
+                    return true;
                 }
             }
         }
 
-        super.renderToolTip(stack, x, y);
+        return false;
     }
+
+    /**
+     * Renders the tooltip for a fluid stack. Returns true if the tooltip was rendered, false otherwise.
+     */
+    private boolean renderFluidToolTip(final int x, final int y, final Slot s) {
+        if (s != null && s instanceof IMEFluidSlot && s.isEnabled()) {
+            final IMEFluidSlot fluidSlot = (IMEFluidSlot) s;
+            final IAEFluidStack fluidStack = fluidSlot.getAEFluidStack();
+
+            if (fluidStack != null && fluidSlot.shouldRenderAsFluid()) {
+                final String formattedAmount = NumberFormat.getNumberInstance(Locale.US)
+                        .format(fluidStack.getStackSize() / 1000.0) + " B";
+
+                final String modId = Platform.getModId(fluidStack);
+                final ModContainer modContainer = Loader.instance().getIndexedModList().get(modId);
+                final String modName = modContainer != null
+                        ? "" + TextFormatting.BLUE + TextFormatting.ITALIC + modContainer.getName()
+                        : "Unknown Mod";
+
+                final List<String> tooltip = new ArrayList<>();
+                tooltip.add(fluidStack.getFluidStack().getLocalizedName());
+                tooltip.add(formattedAmount);
+                tooltip.add(modName);
+
+                this.drawHoveringText(tooltip, x, y);
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

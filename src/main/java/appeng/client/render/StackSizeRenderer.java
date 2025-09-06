@@ -35,6 +35,7 @@ import appeng.util.ReadableNumberConverter;
  * @version rv2
  * @since rv0
  */
+@Deprecated
 public class StackSizeRenderer {
     private static final ISlimReadableNumberConverter SLIM_CONVERTER = ReadableNumberConverter.INSTANCE;
     private static final IWideReadableNumberConverter WIDE_CONVERTER = ReadableNumberConverter.INSTANCE;

@@ -54,6 +54,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.*;
 import net.minecraft.util.registry.RegistryNamespaced;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -64,6 +65,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -1368,7 +1370,7 @@ public class Platform {
                     final ItemStack sh = x.getDefinition();
                     if ((Platform.itemComparisons().isEqualItemType(providedTemplate, sh) || ae_req.sameOre(x))
                             && !ItemStack.areItemsEqual(sh, output)) { // Platform.isSameItemType( sh, providedTemplate
-                                                                       // )
+                        // )
                         final ItemStack cp = sh.copy();
                         cp.setCount(1);
                         ci.setInventorySlotContents(slot, cp);
@@ -1528,4 +1530,17 @@ public class Platform {
     public static boolean isIC2DamageableItem(Item item) {
         return (isModLoaded("IC2") && item instanceof ICustomDamageItem);
     }
+
+    public static String formatModName(String modId) {
+        ModContainer modContainer = Loader.instance().getModList().stream()
+                .filter(mod -> mod.getModId().equals(modId))
+                .findFirst()
+                .orElse(null);
+
+        if (modContainer != null) {
+            return TextFormatting.BLUE.toString() + TextFormatting.ITALIC + modContainer.getName();
+        }
+        return null;
+    }
+
 }

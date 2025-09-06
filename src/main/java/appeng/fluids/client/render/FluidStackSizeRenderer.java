@@ -38,6 +38,7 @@ import appeng.util.ReadableNumberConverter;
  * @version rv6
  * @since rv6
  */
+@Deprecated
 public class FluidStackSizeRenderer {
 
     private static final String[] NUMBER_FORMATS = new String[] { "#.000", "#.00", "#.0", "#" };

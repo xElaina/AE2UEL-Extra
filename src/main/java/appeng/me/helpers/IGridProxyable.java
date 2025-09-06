@@ -30,6 +30,7 @@ public interface IGridProxyable extends IGridHost, IGridNodeService {
 
     void gridChanged();
 
-    void saveChanges();
+    default void saveChanges() {
+    }
 
 }

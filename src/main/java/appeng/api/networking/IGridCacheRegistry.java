@@ -35,10 +35,10 @@ public interface IGridCacheRegistry {
     /**
      * Register a new grid cache for use during operation, must be called during the loading phase.
      *
-     * @param iface   grid cache class
-     * @param factory Factory for creating a new instance for each constructed grid
+     * @param iface grid cache class
      */
-    <T extends IGridCache> void registerGridCache(@Nonnull Class<T> iface, @Nonnull IGridCacheFactory<T> factory);
+    void registerGridCache(@Nonnull Class<? extends IGridCache> iface,
+            @Nonnull Class<? extends IGridCache> implementation);
 
     /**
      * requests a new INSTANCE of a grid cache for use, used internally
