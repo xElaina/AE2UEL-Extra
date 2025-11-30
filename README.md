@@ -23,6 +23,9 @@ The second argument allows you to customize which stages exactly you want to be 
 * Applied Energistics 2
     - (c) 2013 - 2020 AlgorithmX2 et al
     - [![License](https://img.shields.io/badge/License-LGPLv3-blue.svg?style=flat-square)](https://raw.githubusercontent.com/AppliedEnergistics/Applied-Energistics-2/rv2/LICENSE)
+* AE2-UEL
+    - (c) 2022 - 2025 NotMyWing
+    - [![License](https://img.shields.io/badge/License-LGPLv3-blue.svg?style=flat-square)](https://github.com/AE2-UEL/Applied-Energistics-2/blob/master/LICENSE)
 * Textures and Models
     - (c) 2013 - 2018 AlgorithmX2 et al
     - [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%203.0-yellow.svg?style=flat-square)](https://creativecommons.org/licenses/by-nc-sa/3.0/)
