@@ -38,7 +38,7 @@ import appeng.api.storage.data.IItemList;
  * If you want to request a stack of an item, you should should determine that prior to requesting the stack from the
  * inventory.
  */
-public interface IMEInventory<T extends IAEStack<T>> {
+public interface IMEInventory<T extends IAEStack> {
 
     /**
      * Store new items, or simulate the addition of new items into the ME Inventory.
@@ -83,4 +83,19 @@ public interface IMEInventory<T extends IAEStack<T>> {
      * @return the type of channel your handler should be part of
      */
     IStorageChannel<T> getChannel();
+
+    /**
+     * Convenience method to cast inventory handlers with wildcard generic types to the concrete type used by the given
+     * storage channel, but only if the given storage channel is equal to {@link #getChannel()}.
+     *
+     * @throws IllegalArgumentException If channel is not equal to {@link #getChannel()}.
+     */
+    @SuppressWarnings("unchecked")
+    default <SC extends IAEStack> IMEInventory<SC> cast(IStorageChannel<SC> channel) {
+        if (getChannel() == channel) {
+            return (IMEInventory<SC>) this;
+        }
+        throw new IllegalArgumentException("This inventories storage channel " + getChannel()
+                + " is not compatible with " + channel);
+    }
 }

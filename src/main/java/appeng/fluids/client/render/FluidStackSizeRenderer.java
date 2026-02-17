@@ -37,6 +37,7 @@ import appeng.util.ReadableNumberConverter;
  * @author yueh
  * @version rv6
  * @since rv6
+ * @deprecated use {@link appeng.client.render.AEStackSizeRenderer}
  */
 @Deprecated
 public class FluidStackSizeRenderer {

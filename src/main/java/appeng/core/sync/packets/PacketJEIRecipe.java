@@ -214,8 +214,10 @@ public class PacketJEIRecipe extends AppEngPacket {
                                                         continue;
                                                     }
                                                 }
+                                                IAEItemStack extractStack = is.copy();
+                                                extractStack.setStackSize(1);
                                                 out = Platform.poweredExtraction(energy, storage,
-                                                        is.copy().setStackSize(1), cct.getActionSource());
+                                                        extractStack, cct.getActionSource());
                                                 if (out != null) {
                                                     break;
                                                 }

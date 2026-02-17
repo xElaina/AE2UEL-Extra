@@ -51,7 +51,7 @@ public class CraftingWatcher implements ICraftingWatcher {
             return false;
         }
 
-        return this.myInterests.add(e.copy()) && this.gsc.getInterestManager().put(e, this);
+        return this.myInterests.add(IAEStack.copy(e)) && this.gsc.getInterestManager().put(e, this);
     }
 
     @Override

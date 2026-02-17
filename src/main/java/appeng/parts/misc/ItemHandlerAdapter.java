@@ -101,7 +101,8 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
         }
 
         if (type == Actionable.MODULATE) {
-            IAEItemStack added = iox.copy().setStackSize(iox.getStackSize() - remaining.getCount());
+            IAEItemStack added = iox.copy();
+            added.setStackSize(iox.getStackSize() - remaining.getCount());
             this.cache.currentlyCached.add(added);
             this.postDifference(Collections.singletonList(added));
             try {
@@ -185,8 +186,9 @@ class ItemHandlerAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<IAE
                 IAEItemStack cachedStack = this.cache.currentlyCached.findPrecise(request);
                 if (cachedStack != null) {
                     cachedStack.decStackSize(gatheredAEItemStack.getStackSize());
-                    this.postDifference(Collections.singletonList(
-                            gatheredAEItemStack.copy().setStackSize(-gatheredAEItemStack.getStackSize())));
+                    IAEItemStack negativeStack = gatheredAEItemStack.copy();
+                    negativeStack.setStackSize(-gatheredAEItemStack.getStackSize());
+                    this.postDifference(Collections.singletonList(negativeStack));
                 }
                 try {
                     this.proxyable.getProxy().getTick().alertDevice(this.proxyable.getProxy().getNode());

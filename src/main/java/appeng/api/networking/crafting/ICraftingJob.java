@@ -60,9 +60,6 @@ public interface ICraftingJob {
      *                {@link IAEItemStack#reset()} to ignore stack size when matching.
      * @return Total crafting count for the item as primary output. Returns 0 if the item is not a primary output in any
      *         relevant pattern or simulation isn't complete.
-     * @throws IllegalArgumentException If keyItem is null or invalid.
-     * @throws IllegalStateException    If called before simulation completes (when {@link #isSimulation()} returns
-     *                                  false).
      */
     long getTotalCraftsForPrimaryOutput(IAEItemStack keyItem);
 }

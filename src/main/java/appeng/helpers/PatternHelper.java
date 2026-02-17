@@ -38,6 +38,7 @@ import appeng.api.AEApi;
 import appeng.api.networking.crafting.ICraftingPatternDetails;
 import appeng.api.storage.channels.IItemStorageChannel;
 import appeng.api.storage.data.IAEItemStack;
+import appeng.api.storage.data.IAEStack;
 import appeng.container.ContainerNull;
 import appeng.util.Platform;
 import appeng.util.item.AEItemStack;
@@ -153,7 +154,7 @@ public class PatternHelper implements ICraftingPatternDetails, Comparable<Patter
             if (g == null) {
                 tmpOutputs.put(io, io.copy());
             } else {
-                g.add(io);
+                IAEStack.add(g, io);
             }
         }
 
@@ -169,7 +170,7 @@ public class PatternHelper implements ICraftingPatternDetails, Comparable<Patter
             if (g == null) {
                 tmpInputs.put(io, io.copy());
             } else {
-                g.add(io);
+                IAEStack.add(g, io);
             }
         }
 

@@ -78,7 +78,7 @@ public class CellRegistry implements ICellRegistry {
     }
 
     @Override
-    public <T extends IAEStack<T>> ICellInventoryHandler<T> getCellInventory(final ItemStack is,
+    public <T extends IAEStack> ICellInventoryHandler<T> getCellInventory(final ItemStack is,
             final ISaveProvider container, final IStorageChannel<T> chan) {
         if (is.isEmpty()) {
             return null;
@@ -97,7 +97,7 @@ public class CellRegistry implements ICellRegistry {
     }
 
     @Override
-    public <T extends IAEStack<T>> ICellGuiHandler getGuiHandler(final IStorageChannel<T> channel, final ItemStack is) {
+    public <T extends IAEStack> ICellGuiHandler getGuiHandler(final IStorageChannel<T> channel, final ItemStack is) {
         ICellGuiHandler fallBack = null;
 
         for (final ICellGuiHandler ch : this.guiHandlers) {

@@ -162,7 +162,7 @@ public class DualityFluidInterface implements IGridTickable, IStorageMonitorable
     }
 
     @Override
-    public <T extends IAEStack<T>> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
+    public <T extends IAEStack> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
         if (channel == AEApi.instance().storage().getStorageChannel(IItemStorageChannel.class)) {
             if (this.hasConfig()) {
                 return null;
@@ -413,7 +413,8 @@ public class DualityFluidInterface implements IGridTickable, IStorageMonitorable
 
         if (req == null && (stored != null && stored.getStackSize() > 0)) {
             final IAEFluidStack work = stored.copy();
-            this.requireWork[slot] = work.setStackSize(-work.getStackSize());
+            work.setStackSize(-work.getStackSize());
+            this.requireWork[slot] = work;
             return;
         } else if (req != null) {
             int tankSize = (int) (Math.pow(4, this.getInstalledUpgrades(Upgrades.CAPACITY) + 1) * Fluid.BUCKET_VOLUME);
@@ -433,7 +434,8 @@ public class DualityFluidInterface implements IGridTickable, IStorageMonitorable
             // Stored != null; dispose!
             {
                 final IAEFluidStack work = stored.copy();
-                this.requireWork[slot] = work.setStackSize(-work.getStackSize());
+                work.setStackSize(-work.getStackSize());
+                this.requireWork[slot] = work;
                 return;
             }
         }

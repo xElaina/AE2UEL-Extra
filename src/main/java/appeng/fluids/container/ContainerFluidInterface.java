@@ -163,8 +163,9 @@ public class ContainerFluidInterface extends ContainerFluidConfigurable implemen
                 copiedFluidContainer.setCount(1);
                 fh = FluidUtil.getFluidHandler(copiedFluidContainer);
 
+                stack.setStackSize(amountAllowed);
                 FluidStack extractableFluid = this.myDuality.getTanks()
-                        .drain(stack.setStackSize(amountAllowed).getFluidStack(), false);
+                        .drain(stack.getFluidStack(), false);
                 if (extractableFluid == null || extractableFluid.amount == 0) {
                     break;
                 }

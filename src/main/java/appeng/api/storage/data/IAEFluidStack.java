@@ -36,7 +36,7 @@ import net.minecraftforge.fluids.FluidStack;
  *
  * Construct with AEApi.instance().storage().getStorageChannel( IFluidStorageChannel.class).createStack( FluidStack )
  */
-public interface IAEFluidStack extends IAEStack<IAEFluidStack> {
+public interface IAEFluidStack extends IAEStack {
 
     /**
      * creates a standard Forge FluidStack for the fluid.
@@ -46,19 +46,10 @@ public interface IAEFluidStack extends IAEStack<IAEFluidStack> {
     FluidStack getFluidStack();
 
     /**
-     * Combines two IAEItemStacks via addition.
-     *
-     * @param option , to add to the current one.
-     */
-    @Override
-    void add(IAEFluidStack option);
-
-    /**
      * create a AE Fluid clone.
      *
      * @return the copy.
      */
-    @Override
     IAEFluidStack copy();
 
     /**

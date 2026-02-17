@@ -27,7 +27,7 @@ import appeng.api.networking.storage.IBaseMonitor;
 import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemList;
 
-public interface IMEMonitor<T extends IAEStack<T>> extends IMEInventoryHandler<T>, IBaseMonitor<T> {
+public interface IMEMonitor<T extends IAEStack> extends IMEInventoryHandler<T>, IBaseMonitor<T> {
 
     /**
      * This method is discouraged when accessing data via a IMEMonitor
@@ -42,4 +42,19 @@ public interface IMEMonitor<T extends IAEStack<T>> extends IMEInventoryHandler<T
      * @return full storage list.
      */
     IItemList<T> getStorageList();
+
+    /**
+     * Convenience method to cast monitors with wildcard generic types to the concrete type used by the given storage
+     * channel, but only if the given storage channel is equal to {@link #getChannel()}.
+     *
+     * @throws IllegalArgumentException If channel is not equal to {@link #getChannel()}.
+     */
+    @SuppressWarnings("unchecked")
+    default <SC extends IAEStack> IMEMonitor<SC> cast(IStorageChannel<SC> channel) {
+        if (getChannel() == channel) {
+            return (IMEMonitor<SC>) this;
+        }
+        throw new IllegalArgumentException("The monitors storage channel " + getChannel()
+                + " is not compatible with " + channel);
+    }
 }

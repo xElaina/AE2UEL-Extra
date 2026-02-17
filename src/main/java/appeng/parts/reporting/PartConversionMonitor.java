@@ -43,6 +43,7 @@ import appeng.api.storage.channels.IFluidStorageChannel;
 import appeng.api.storage.channels.IItemStorageChannel;
 import appeng.api.storage.data.IAEFluidStack;
 import appeng.api.storage.data.IAEItemStack;
+import appeng.api.storage.data.IAEStack;
 import appeng.core.AELog;
 import appeng.core.AppEng;
 import appeng.fluids.util.AEFluidStack;
@@ -188,8 +189,9 @@ public class PartConversionMonitor extends AbstractPartMonitor {
                     .getInventory(AEApi.instance().storage().getStorageChannel(IItemStorageChannel.class));
 
             if (allItems) {
-                if (this.getDisplayed() != null && this.getDisplayed() instanceof IAEItemStack) {
-                    final IAEItemStack input = (IAEItemStack) this.getDisplayed().copy();
+                IAEStack displayed = this.getDisplayed();
+                if (displayed instanceof IAEItemStack itemStack) {
+                    final IAEItemStack input = IAEStack.copy(itemStack);
                     IItemHandler inv = new PlayerMainInvWrapper(player.inventory);
 
                     for (int x = 0; x < inv.getSlots(); x++) {
@@ -220,42 +222,44 @@ public class PartConversionMonitor extends AbstractPartMonitor {
     }
 
     private void extractItem(final EntityPlayer player, int count) {
-        if (!(this.getDisplayed() instanceof IAEItemStack))
+        IAEStack displayed = this.getDisplayed();
+        if (!(displayed instanceof IAEItemStack itemStack)) {
             return;
-        final IAEItemStack input = (IAEItemStack) this.getDisplayed().copy();
-        if (input != null) {
-            try {
-                if (!this.getProxy().isActive()) {
-                    return;
-                }
+        }
 
-                final IEnergySource energy = this.getProxy().getEnergy();
-                final IMEMonitor<IAEItemStack> cell = this.getProxy()
-                        .getStorage()
-                        .getInventory(
-                                AEApi.instance().storage().getStorageChannel(IItemStorageChannel.class));
+        final IAEItemStack input = IAEStack.copy(itemStack);
 
-                input.setStackSize(count);
-
-                final IAEItemStack retrieved = Platform.poweredExtraction(energy, cell, input,
-                        new PlayerSource(player, this));
-                if (retrieved != null) {
-                    ItemStack newItems = retrieved.createItemStack();
-                    final InventoryAdaptor adaptor = InventoryAdaptor.getAdaptor(player);
-                    newItems = adaptor.addItems(newItems);
-                    if (!newItems.isEmpty()) {
-                        final TileEntity te = this.getTile();
-                        final List<ItemStack> list = Collections.singletonList(newItems);
-                        Platform.spawnDrops(player.world, te.getPos().offset(this.getSide().getFacing()), list);
-                    }
-
-                    if (player.openContainer != null) {
-                        player.openContainer.detectAndSendChanges();
-                    }
-                }
-            } catch (final GridAccessException e) {
-                // :P
+        try {
+            if (!this.getProxy().isActive()) {
+                return;
             }
+
+            final IEnergySource energy = this.getProxy().getEnergy();
+            final IMEMonitor<IAEItemStack> cell = this.getProxy()
+                    .getStorage()
+                    .getInventory(
+                            AEApi.instance().storage().getStorageChannel(IItemStorageChannel.class));
+
+            input.setStackSize(count);
+
+            final IAEItemStack retrieved = Platform.poweredExtraction(energy, cell, input,
+                    new PlayerSource(player, this));
+            if (retrieved != null) {
+                ItemStack newItems = retrieved.createItemStack();
+                final InventoryAdaptor adaptor = InventoryAdaptor.getAdaptor(player);
+                newItems = adaptor.addItems(newItems);
+                if (!newItems.isEmpty()) {
+                    final TileEntity te = this.getTile();
+                    final List<ItemStack> list = Collections.singletonList(newItems);
+                    Platform.spawnDrops(player.world, te.getPos().offset(this.getSide().getFacing()), list);
+                }
+
+                if (player.openContainer != null) {
+                    player.openContainer.detectAndSendChanges();
+                }
+            }
+        } catch (final GridAccessException e) {
+            // :P
         }
     }
 
@@ -331,7 +335,12 @@ public class PartConversionMonitor extends AbstractPartMonitor {
                 return;
             }
 
-            final IAEFluidStack stack = (IAEFluidStack) this.getDisplayed().copy();
+            IAEStack displayed = this.getDisplayed();
+            if (!(displayed instanceof IAEFluidStack fluidStack)) {
+                return;
+            }
+
+            final IAEFluidStack stack = IAEStack.copy(fluidStack);
 
             // Check how much we can store in the item
             stack.setStackSize(Integer.MAX_VALUE);

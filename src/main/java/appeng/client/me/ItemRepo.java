@@ -31,6 +31,7 @@ import appeng.api.AEApi;
 import appeng.api.config.*;
 import appeng.api.storage.channels.IItemStorageChannel;
 import appeng.api.storage.data.IAEItemStack;
+import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemList;
 import appeng.client.gui.widgets.IScrollSource;
 import appeng.client.gui.widgets.ISortSource;
@@ -89,7 +90,7 @@ public class ItemRepo {
 
         if (st != null) {
             st.reset();
-            st.add(is);
+            IAEStack.add(st, is);
         } else {
             this.list.add(is);
         }

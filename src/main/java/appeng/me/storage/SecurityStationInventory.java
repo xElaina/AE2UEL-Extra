@@ -98,10 +98,12 @@ public class SecurityStationInventory implements IMEInventoryHandler<IAEItemStac
                 }
 
                 if (securityTile.getProxy().isActive()) {
+                    IAEItemStack changeStack = target.copy();
+                    changeStack.setStackSize(-target.getStackSize());
                     ((MEMonitorHandler<IAEItemStack>) securityTile
                             .getInventory(AEApi.instance().storage().getStorageChannel(IItemStorageChannel.class)))
                             .postChangesToListeners(
-                                    Collections.singletonList(target.copy().setStackSize(-target.getStackSize())),
+                                    Collections.singletonList(changeStack),
                                     this.src);
                 }
 

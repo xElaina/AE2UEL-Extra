@@ -84,7 +84,8 @@ public class FluidHandlerAdapter implements IMEInventory<IAEFluidStack>, IBaseMo
         }
 
         if (type == Actionable.MODULATE) {
-            IAEFluidStack added = input.copy().setStackSize(input.getStackSize() - remaining);
+            IAEFluidStack added = input.copy();
+            added.setStackSize(input.getStackSize() - remaining);
             this.cache.currentlyCached.add(added);
             this.postDifference(Collections.singletonList(added));
             try {
@@ -116,8 +117,9 @@ public class FluidHandlerAdapter implements IMEInventory<IAEFluidStack>, IBaseMo
             IAEFluidStack cachedStack = this.cache.currentlyCached.findPrecise(request);
             if (cachedStack != null) {
                 cachedStack.decStackSize(gatheredAEFluidstack.getStackSize());
-                this.postDifference(Collections
-                        .singletonList(gatheredAEFluidstack.copy().setStackSize(-gatheredAEFluidstack.getStackSize())));
+                IAEFluidStack changeStack = gatheredAEFluidstack.copy();
+                changeStack.setStackSize(-gatheredAEFluidstack.getStackSize());
+                this.postDifference(Collections.singletonList(changeStack));
             }
             try {
                 this.proxyable.getProxy().getTick().alertDevice(this.proxyable.getProxy().getNode());

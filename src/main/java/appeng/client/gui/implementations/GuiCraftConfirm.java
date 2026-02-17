@@ -487,7 +487,8 @@ public class GuiCraftConfirm extends AEBaseGui {
     private void handleCraftingRounds(List<IAEItemStack> list) {
         this.craftingRounds.clear();
         for (IAEItemStack stack : list) {
-            IAEItemStack key = stack.copy().reset();
+            IAEItemStack key = stack.copy();
+            key.reset();
             this.craftingRounds.put(key, stack.getStackSize());
         }
     }

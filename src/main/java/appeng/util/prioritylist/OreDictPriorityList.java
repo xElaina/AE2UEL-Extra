@@ -11,7 +11,7 @@ import appeng.util.item.OreDictFilterMatcher.MatchRule;
 import appeng.util.item.OreHelper;
 import appeng.util.item.OreReference;
 
-public class OreDictPriorityList<T extends IAEStack<T>> implements IPartitionList<T> {
+public class OreDictPriorityList<T extends IAEStack> implements IPartitionList<T> {
     private final Set<Integer> oreIDs;
     private final boolean matchesEmptyOreDict;
 

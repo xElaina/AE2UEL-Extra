@@ -112,7 +112,9 @@ public class MEMonitorIInventory implements IMEMonitor<IAEItemStack>, ITickingMo
             IAEItemStack cachedStack = this.cache.findPrecise(request);
             if (cachedStack != null) {
                 cachedStack.decStackSize(o.getStackSize());
-                this.postDifference(Collections.singletonList(o.copy().setStackSize(-o.getStackSize())));
+                IAEItemStack changedStack = o.copy();
+                changedStack.setStackSize(-o.getStackSize());
+                this.postDifference(Collections.singletonList(changedStack));
             }
             this.onTick();
         }

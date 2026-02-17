@@ -1059,12 +1059,12 @@ public class Platform {
         return pos;
     }
 
-    public static <T extends IAEStack<T>> T poweredExtraction(final IEnergySource energy, final IMEInventory<T> cell,
+    public static <T extends IAEStack> T poweredExtraction(final IEnergySource energy, final IMEInventory<T> cell,
             final T request, final IActionSource src) {
         return poweredExtraction(energy, cell, request, src, Actionable.MODULATE);
     }
 
-    public static <T extends IAEStack<T>> T poweredExtraction(final IEnergySource energy, final IMEInventory<T> cell,
+    public static <T extends IAEStack> T poweredExtraction(final IEnergySource energy, final IMEInventory<T> cell,
             final T request, final IActionSource src, final Actionable mode) {
         Preconditions.checkNotNull(energy);
         Preconditions.checkNotNull(cell);
@@ -1072,7 +1072,7 @@ public class Platform {
         Preconditions.checkNotNull(src);
         Preconditions.checkNotNull(mode);
 
-        final T possible = cell.extractItems(request.copy(), Actionable.SIMULATE, src);
+        final T possible = cell.extractItems(IAEStack.copy(request), Actionable.SIMULATE, src);
 
         long retrieved = 0;
         if (possible != null) {
@@ -1096,19 +1096,20 @@ public class Platform {
                 }
                 return ret;
             } else {
-                return possible.setStackSize(itemToExtract);
+                possible.setStackSize(itemToExtract);
+                return possible;
             }
         }
 
         return null;
     }
 
-    public static <T extends IAEStack<T>> T poweredInsert(final IEnergySource energy, final IMEInventory<T> cell,
+    public static <T extends IAEStack> T poweredInsert(final IEnergySource energy, final IMEInventory<T> cell,
             final T input, final IActionSource src) {
         return poweredInsert(energy, cell, input, src, Actionable.MODULATE);
     }
 
-    public static <T extends IAEStack<T>> T poweredInsert(final IEnergySource energy, final IMEInventory<T> cell,
+    public static <T extends IAEStack> T poweredInsert(final IEnergySource energy, final IMEInventory<T> cell,
             final T input, final IActionSource src, final Actionable mode) {
         Preconditions.checkNotNull(energy);
         Preconditions.checkNotNull(cell);
@@ -1133,12 +1134,12 @@ public class Platform {
                 energy.extractAEPower(stored / energyFactor, Actionable.MODULATE, PowerMultiplier.CONFIG);
                 if (itemToAdd < input.getStackSize()) {
                     final long original = input.getStackSize();
-                    final T leftover = input.copy();
-                    final T split = input.copy();
+                    final T leftover = IAEStack.copy(input);
+                    final T split = IAEStack.copy(input);
 
                     leftover.decStackSize(itemToAdd);
                     split.setStackSize(itemToAdd);
-                    leftover.add(cell.injectItems(split, Actionable.MODULATE, src));
+                    IAEStack.add(leftover, cell.injectItems(split, Actionable.MODULATE, src));
 
                     src.player().ifPresent(player -> {
                         final long diff = original - leftover.getStackSize();
@@ -1157,7 +1158,7 @@ public class Platform {
 
                 return ret;
             } else {
-                final T ret = input.copy().setStackSize(input.getStackSize() - itemToAdd);
+                var ret = IAEStack.copy(input, input.getStackSize() - itemToAdd);
                 return (ret != null && ret.getStackSize() > 0) ? ret : null;
             }
         }
@@ -1191,7 +1192,7 @@ public class Platform {
         }
     }
 
-    public static <T extends IAEStack<T>> void postListChanges(final IItemList<T> before, final IItemList<T> after,
+    public static <T extends IAEStack> void postListChanges(final IItemList<T> before, final IItemList<T> after,
             final IMEMonitorHandlerReceiver<T> meMonitorPassthrough, final IActionSource source) {
         final List<T> changes = new ArrayList<>();
 

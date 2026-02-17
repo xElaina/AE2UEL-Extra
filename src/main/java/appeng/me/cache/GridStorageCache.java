@@ -134,12 +134,12 @@ public class GridStorageCache implements IStorageGrid {
 
     }
 
-    public <T extends IAEStack<T>> IMEInventoryHandler<T> getInventoryHandler(IStorageChannel<T> channel) {
+    public <T extends IAEStack> IMEInventoryHandler<T> getInventoryHandler(IStorageChannel<T> channel) {
         return (IMEInventoryHandler<T>) this.storageNetworks.computeIfAbsent(channel, this::buildNetworkStorage);
     }
 
     @Override
-    public <T extends IAEStack<T>> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
+    public <T extends IAEStack> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
         return (IMEMonitor<T>) this.storageMonitors.get(channel);
     }
 
@@ -212,12 +212,12 @@ public class GridStorageCache implements IStorageGrid {
         this.storageMonitors.forEach((channel, monitor) -> monitor.setForceUpdate(true));
     }
 
-    private <T extends IAEStack<T>, C extends IStorageChannel<T>> void postChangesToNetwork(final C chan,
+    private <T extends IAEStack, C extends IStorageChannel<T>> void postChangesToNetwork(final C chan,
             final int upOrDown, final IItemList<T> availableItems, final IActionSource src) {
         this.storageMonitors.get(chan).postChange(upOrDown > 0, (Iterable) availableItems, src);
     }
 
-    private <T extends IAEStack<T>, C extends IStorageChannel<T>> NetworkInventoryHandler<T> buildNetworkStorage(
+    private <T extends IAEStack, C extends IStorageChannel<T>> NetworkInventoryHandler<T> buildNetworkStorage(
             final C chan) {
         final SecurityCache security = this.getGrid().getCache(ISecurityGrid.class);
 
@@ -233,13 +233,13 @@ public class GridStorageCache implements IStorageGrid {
     }
 
     @Override
-    public void postAlterationOfStoredItems(final IStorageChannel<?> chan, final Iterable<? extends IAEStack<?>> input,
+    public void postAlterationOfStoredItems(final IStorageChannel<?> chan, final Iterable<? extends IAEStack> input,
             final IActionSource src) {
         this.storageMonitors.get(chan).postChange(true, (Iterable) input, src);
     }
 
     @Override
-    public void postCraftablesChanges(IStorageChannel<?> chan, Iterable<? extends IAEStack<?>> input,
+    public void postCraftablesChanges(IStorageChannel<?> chan, Iterable<? extends IAEStack> input,
             IActionSource src) {
         this.storageMonitors.get(chan).updateCraftables((Iterable) input, src);
     }
@@ -264,7 +264,7 @@ public class GridStorageCache implements IStorageGrid {
         return this.myGrid;
     }
 
-    private class CellChangeTrackerRecord<T extends IAEStack<T>> {
+    private class CellChangeTrackerRecord<T extends IAEStack> {
 
         final IStorageChannel<T> channel;
         final int up_or_down;
@@ -287,7 +287,7 @@ public class GridStorageCache implements IStorageGrid {
         }
     }
 
-    private class CellChangeTracker<T extends IAEStack<T>> {
+    private class CellChangeTracker<T extends IAEStack> {
 
         final List<CellChangeTrackerRecord<T>> data = new ArrayList<>();
 

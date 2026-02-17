@@ -24,6 +24,7 @@ import appeng.api.AEApi;
 import appeng.api.config.FuzzyMode;
 import appeng.api.storage.channels.IItemStorageChannel;
 import appeng.api.storage.data.IAEItemStack;
+import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemContainer;
 
 public class ItemModList implements IItemContainer<IAEItemStack> {
@@ -44,7 +45,7 @@ public class ItemModList implements IItemContainer<IAEItemStack> {
             if (over == null) {
                 this.overrides.add(option);
             } else {
-                option.add(over);
+                IAEStack.add(option, over);
                 this.overrides.add(option);
             }
         } else {

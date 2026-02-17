@@ -60,7 +60,7 @@ public class TileDrive extends AENetworkInvTile implements IChestOrDrive, IPrior
     private final DriveWatcher<IAEItemStack>[] invBySlot = new DriveWatcher[10];
     private final IActionSource mySrc;
     private boolean isCached = false;
-    private final Map<IStorageChannel<? extends IAEStack<?>>, List<IMEInventoryHandler>> inventoryHandlers;
+    private final Map<IStorageChannel<? extends IAEStack>, List<IMEInventoryHandler>> inventoryHandlers;
     private int priority = 0;
     private boolean wasActive = false;
 
@@ -228,7 +228,7 @@ public class TileDrive extends AENetworkInvTile implements IChestOrDrive, IPrior
 
     private void updateState() {
         if (!this.isCached) {
-            final Collection<IStorageChannel<? extends IAEStack<?>>> storageChannels = AEApi.instance().storage()
+            final Collection<IStorageChannel<? extends IAEStack>> storageChannels = AEApi.instance().storage()
                     .storageChannels();
             storageChannels.forEach(channel -> this.inventoryHandlers.put(channel, new ArrayList<>(10)));
 
@@ -243,7 +243,7 @@ public class TileDrive extends AENetworkInvTile implements IChestOrDrive, IPrior
                     this.handlersBySlot[x] = AEApi.instance().registries().cell().getHandler(is);
 
                     if (this.handlersBySlot[x] != null) {
-                        for (IStorageChannel<? extends IAEStack<?>> channel : storageChannels) {
+                        for (IStorageChannel<? extends IAEStack> channel : storageChannels) {
 
                             ICellInventoryHandler cell = this.handlersBySlot[x].getCellInventory(is, this, channel);
 

@@ -261,7 +261,10 @@ public final class CraftingCPUCluster implements IAECluster, ICraftingCPU {
 
                 if (this.finalOutput.equals(what)) {
                     if (this.myLastLink != null) {
-                        leftOver.add(((CraftingLink) this.myLastLink).injectItems(used.copy(), type));
+                        IAEItemStack injected = ((CraftingLink) this.myLastLink).injectItems(used.copy(), type);
+                        if (injected != null) {
+                            leftOver.setStackSize(leftOver.getStackSize() + injected.getStackSize());
+                        }
                         return leftOver;
                     }
 
@@ -281,7 +284,9 @@ public final class CraftingCPUCluster implements IAECluster, ICraftingCPU {
 
                     this.updateRemainingItemCount(what);
                     this.markDirty();
-                    this.postCraftingStatusChange(what.copy().setStackSize(-what.getStackSize()));
+                    IAEItemStack statusChange = what.copy();
+                    statusChange.setStackSize(-what.getStackSize());
+                    this.postCraftingStatusChange(statusChange);
 
                     if (this.finalOutput.equals(what)) {
                         IAEItemStack leftover = what;
@@ -310,7 +315,9 @@ public final class CraftingCPUCluster implements IAECluster, ICraftingCPU {
                 what.decStackSize(is.getStackSize());
 
                 is.setStackSize(0);
-                this.postCraftingStatusChange(insert.copy().setStackSize(-insert.getStackSize()));
+                IAEItemStack statusChange2 = insert.copy();
+                statusChange2.setStackSize(-insert.getStackSize());
+                this.postCraftingStatusChange(statusChange2);
 
                 if (this.finalOutput.equals(insert)) {
                     IAEItemStack leftover = input;
@@ -318,7 +325,10 @@ public final class CraftingCPUCluster implements IAECluster, ICraftingCPU {
                     this.finalOutput.decStackSize(insert.getStackSize());
 
                     if (this.myLastLink != null) {
-                        what.add(((CraftingLink) this.myLastLink).injectItems(insert.copy(), type));
+                        IAEItemStack injected = ((CraftingLink) this.myLastLink).injectItems(insert.copy(), type);
+                        if (injected != null) {
+                            what.setStackSize(what.getStackSize() + injected.getStackSize());
+                        }
                         leftover = what;
                     }
 
@@ -567,7 +577,11 @@ public final class CraftingCPUCluster implements IAECluster, ICraftingCPU {
 
         // final ImmutableSet<IAEItemStack> items = ImmutableSet.copyOf( this.waitingFor );
         final List<IAEItemStack> items = new ArrayList<>(this.waitingFor.size());
-        this.waitingFor.forEach(stack -> items.add(stack.copy().setStackSize(-stack.getStackSize())));
+        this.waitingFor.forEach(stack -> {
+            IAEItemStack copiedStack = stack.copy();
+            copiedStack.setStackSize(-stack.getStackSize());
+            items.add(copiedStack);
+        });
 
         this.waitingFor.resetStatus();
 

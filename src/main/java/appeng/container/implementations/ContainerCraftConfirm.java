@@ -205,7 +205,8 @@ public class ContainerCraftConfirm extends AEBaseContainer {
                     Map<IAEItemStack, Long> craftCounts = new HashMap<>();
                     for (final IAEItemStack item : plan) {
                         try {
-                            IAEItemStack keyItem = item.copy().reset();
+                            IAEItemStack keyItem = item.copy();
+                            keyItem.reset();
                             long count = this.result.getTotalCraftsForPrimaryOutput(keyItem);
                             if (count > 0) {
                                 craftCounts.put(keyItem, count);
@@ -248,10 +249,12 @@ public class ContainerCraftConfirm extends AEBaseContainer {
                             b.appendItem(p);
                         }
 
-                        IAEItemStack m = null;
+                        IAEItemStack m;
                         if (c != null && this.result.isSimulation()) {
                             m = o.copy();
-                            o = simulatedExtract != null ? simulatedExtract : o.copy().setStackSize(0);
+                            IAEItemStack temp = o.copy();
+                            temp.setStackSize(0);
+                            o = simulatedExtract != null ? simulatedExtract : temp;
                             m.setStackSize(m.getStackSize() - o.getStackSize());
                             if (m.getStackSize() > 0) {
                                 c.appendItem(m);

@@ -101,7 +101,9 @@ public class MEMonitorIFluidHandler implements IMEMonitor<IAEFluidStack>, ITicki
             IAEFluidStack cachedStack = this.cache.findPrecise(request);
             if (cachedStack != null) {
                 cachedStack.decStackSize(o.getStackSize());
-                this.postDifference(Collections.singletonList(o.copy().setStackSize(-o.getStackSize())));
+                IAEFluidStack changeStack = o.copy();
+                changeStack.setStackSize(-o.getStackSize());
+                this.postDifference(Collections.singletonList(changeStack));
             }
         }
         return o;

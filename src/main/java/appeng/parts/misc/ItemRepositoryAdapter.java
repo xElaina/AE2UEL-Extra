@@ -77,7 +77,8 @@ class ItemRepositoryAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<
         }
 
         if (type == Actionable.MODULATE) {
-            IAEItemStack added = iox.copy().setStackSize(iox.getStackSize() - remaining.getCount());
+            IAEItemStack added = iox.copy();
+            added.setStackSize(iox.getStackSize() - remaining.getCount());
             this.cache.currentlyCached.add(added);
             this.postDifference(Collections.singletonList(added));
             try {
@@ -113,8 +114,9 @@ class ItemRepositoryAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<
                 IAEItemStack cachedStack = this.cache.currentlyCached.findPrecise(request);
                 if (cachedStack != null) {
                     cachedStack.decStackSize(extractedAEItemStack.getStackSize());
-                    this.postDifference(Collections.singletonList(
-                            extractedAEItemStack.copy().setStackSize(-extractedAEItemStack.getStackSize())));
+                    IAEItemStack difference = extractedAEItemStack.copy();
+                    difference.setStackSize(-extractedAEItemStack.getStackSize());
+                    this.postDifference(Collections.singletonList(difference));
                 }
                 try {
                     this.proxyable.getProxy().getTick().alertDevice(this.proxyable.getProxy().getNode());
@@ -197,7 +199,11 @@ class ItemRepositoryAdapter implements IMEInventory<IAEItemStack>, IBaseMonitor<
             IItemList<IAEItemStack> currentlyOnStorage = AEApi.instance().storage()
                     .getStorageChannel(IItemStorageChannel.class).createList();
             this.iItemRepository.getAllItems().stream()
-                    .map(s -> AEItemStack.fromItemStack(s.itemPrototype).setStackSize(s.count))
+                    .map(s -> {
+                        IAEItemStack stack = AEItemStack.fromItemStack(s.itemPrototype);
+                        stack.setStackSize(s.count);
+                        return stack;
+                    })
                     .forEach(currentlyOnStorage::add);
 
             for (final IAEItemStack is : currentlyCached) {

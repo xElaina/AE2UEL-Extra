@@ -384,8 +384,10 @@ public class ContainerFluidTerminal extends AEBaseContainer
                 fh = FluidUtil.getFluidHandler(copiedFluidContainer);
 
                 // Check if we can pull out of the system
+                IAEFluidStack pullStack = stack.copy();
+                pullStack.setStackSize(amountAllowed);
                 final IAEFluidStack canPull = Platform.poweredExtraction(this.getPowerSource(), this.monitor,
-                        stack.setStackSize(amountAllowed), this.getActionSource(), Actionable.SIMULATE);
+                        pullStack, this.getActionSource(), Actionable.SIMULATE);
                 if (canPull == null || canPull.getStackSize() < 1) {
                     return;
                 }
@@ -397,8 +399,10 @@ public class ContainerFluidTerminal extends AEBaseContainer
                 }
 
                 // Now actually pull out of the system
+                IAEFluidStack actualPullStack = stack.copy();
+                actualPullStack.setStackSize(canFill);
                 final IAEFluidStack pulled = Platform.poweredExtraction(this.getPowerSource(), this.monitor,
-                        stack.setStackSize(canFill), this.getActionSource());
+                        actualPullStack, this.getActionSource());
                 if (pulled == null || pulled.getStackSize() < 1) {
                     // Something went wrong
                     AELog.error("Unable to pull fluid out of the ME system even though the simulation said yes ");

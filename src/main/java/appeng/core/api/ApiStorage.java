@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 
+import javax.annotation.Nonnull;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.MutableClassToInstanceMap;
@@ -30,6 +32,7 @@ import io.netty.buffer.ByteBuf;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
@@ -48,6 +51,7 @@ import appeng.api.storage.data.IAEFluidStack;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemList;
+import appeng.core.AppEng;
 import appeng.crafting.CraftingLink;
 import appeng.fluids.items.FluidDummyItem;
 import appeng.fluids.util.AEFluidStack;
@@ -67,7 +71,7 @@ public class ApiStorage implements IStorageHelper {
     }
 
     @Override
-    public <T extends IAEStack<T>, C extends IStorageChannel<T>> void registerStorageChannel(Class<C> channel,
+    public <T extends IAEStack, C extends IStorageChannel<T>> void registerStorageChannel(Class<C> channel,
             C factory) {
         Preconditions.checkNotNull(channel);
         Preconditions.checkNotNull(factory);
@@ -78,7 +82,7 @@ public class ApiStorage implements IStorageHelper {
     }
 
     @Override
-    public <T extends IAEStack<T>, C extends IStorageChannel<T>> C getStorageChannel(Class<C> channel) {
+    public <T extends IAEStack, C extends IStorageChannel<T>> C getStorageChannel(Class<C> channel) {
         Preconditions.checkNotNull(channel);
 
         final C type = this.channels.getInstance(channel);
@@ -89,7 +93,7 @@ public class ApiStorage implements IStorageHelper {
     }
 
     @Override
-    public Collection<IStorageChannel<? extends IAEStack<?>>> storageChannels() {
+    public Collection<IStorageChannel<? extends IAEStack>> storageChannels() {
         return Collections.unmodifiableCollection(this.channels.values());
     }
 
@@ -102,13 +106,13 @@ public class ApiStorage implements IStorageHelper {
     }
 
     @Override
-    public <T extends IAEStack<T>> T poweredInsert(IEnergySource energy, IMEInventory<T> inv, T input,
+    public <T extends IAEStack> T poweredInsert(IEnergySource energy, IMEInventory<T> inv, T input,
             IActionSource src, Actionable mode) {
         return Platform.poweredInsert(energy, inv, input, src, mode);
     }
 
     @Override
-    public <T extends IAEStack<T>> T poweredExtraction(IEnergySource energy, IMEInventory<T> inv, T request,
+    public <T extends IAEStack> T poweredExtraction(IEnergySource energy, IMEInventory<T> inv, T request,
             IActionSource src, Actionable mode) {
         return Platform.poweredExtraction(energy, inv, request, src, mode);
     }
@@ -125,6 +129,12 @@ public class ApiStorage implements IStorageHelper {
 
     private static final class ItemStorageChannel implements IItemStorageChannel {
 
+        @Nonnull
+        @Override
+        public ResourceLocation getId() {
+            return AppEng.makeId("item");
+        }
+
         @Override
         public IItemList<IAEItemStack> createList() {
             return new ItemList();
@@ -134,8 +144,8 @@ public class ApiStorage implements IStorageHelper {
         public IAEItemStack createStack(Object input) {
             Preconditions.checkNotNull(input);
 
-            if (input instanceof ItemStack) {
-                return AEItemStack.fromItemStack((ItemStack) input);
+            if (input instanceof ItemStack stack) {
+                return AEItemStack.fromItemStack(stack);
             }
 
             return null;
@@ -153,9 +163,20 @@ public class ApiStorage implements IStorageHelper {
 
             return AEItemStack.fromPacket(input);
         }
+
+        @Override
+        public IAEItemStack copy(IAEItemStack stack) {
+            return stack.copy();
+        }
     }
 
     private static final class FluidStorageChannel implements IFluidStorageChannel {
+
+        @Nonnull
+        @Override
+        public ResourceLocation getId() {
+            return AppEng.makeId("fluid");
+        }
 
         @Override
         public int transferFactor() {
@@ -176,11 +197,10 @@ public class ApiStorage implements IStorageHelper {
         public IAEFluidStack createStack(Object input) {
             Preconditions.checkNotNull(input);
 
-            if (input instanceof FluidStack) {
-                return AEFluidStack.fromFluidStack((FluidStack) input);
+            if (input instanceof FluidStack stack) {
+                return AEFluidStack.fromFluidStack(stack);
             }
-            if (input instanceof ItemStack) {
-                final ItemStack is = (ItemStack) input;
+            if (input instanceof ItemStack is) {
                 if (is.getItem() instanceof FluidDummyItem) {
                     return AEFluidStack.fromFluidStack(((FluidDummyItem) is.getItem()).getFluidStack(is));
                 } else {
@@ -202,6 +222,11 @@ public class ApiStorage implements IStorageHelper {
         public IAEFluidStack createFromNBT(NBTTagCompound nbt) {
             Preconditions.checkNotNull(nbt);
             return AEFluidStack.fromNBT(nbt);
+        }
+
+        @Override
+        public IAEFluidStack copy(IAEFluidStack stack) {
+            return stack.copy();
         }
     }
 

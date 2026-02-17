@@ -61,7 +61,7 @@ public interface IStorageHelper {
      * @param factory An instance implementing the channel, must be be an instance of channel
      */
     @Nonnull
-    <T extends IAEStack<T>, C extends IStorageChannel<T>> void registerStorageChannel(@Nonnull Class<C> channel,
+    <T extends IAEStack, C extends IStorageChannel<T>> void registerStorageChannel(@Nonnull Class<C> channel,
             @Nonnull C factory);
 
     /**
@@ -74,7 +74,7 @@ public interface IStorageHelper {
      * @return the factory instance
      */
     @Nonnull
-    <T extends IAEStack<T>, C extends IStorageChannel<T>> C getStorageChannel(@Nonnull Class<C> channel);
+    <T extends IAEStack, C extends IStorageChannel<T>> C getStorageChannel(@Nonnull Class<C> channel);
 
     /**
      * An unmodifiable collection of all registered factory instance.
@@ -82,7 +82,7 @@ public interface IStorageHelper {
      * This is mainly used as helper to let storage grids construct their internal storage for each type.
      */
     @Nonnull
-    Collection<IStorageChannel<? extends IAEStack<?>>> storageChannels();
+    Collection<IStorageChannel<? extends IAEStack>> storageChannels();
 
     /**
      * load a crafting link from nbt data.
@@ -103,7 +103,7 @@ public interface IStorageHelper {
      * @param mode    Simulate or modulate
      * @return extracted items or {@code null} of nothing was extracted.
      */
-    <T extends IAEStack<T>> T poweredExtraction(final IEnergySource energy, final IMEInventory<T> inv, final T request,
+    <T extends IAEStack> T poweredExtraction(final IEnergySource energy, final IMEInventory<T> inv, final T request,
             final IActionSource src, final Actionable mode);
 
     /**
@@ -116,7 +116,7 @@ public interface IStorageHelper {
      * @param mode   Simulate or modulate
      * @return items not inserted or {@code null} if everything was inserted.
      */
-    <T extends IAEStack<T>> T poweredInsert(final IEnergySource energy, final IMEInventory<T> inv, final T input,
+    <T extends IAEStack> T poweredInsert(final IEnergySource energy, final IMEInventory<T> inv, final T input,
             final IActionSource src, final Actionable mode);
 
     /**

@@ -32,7 +32,7 @@ import appeng.me.GridAccessException;
 import appeng.me.helpers.MachineSource;
 import appeng.tile.storage.TileDrive;
 
-public class DriveWatcher<T extends IAEStack<T>> extends MEInventoryHandler<T> {
+public class DriveWatcher<T extends IAEStack> extends MEInventoryHandler<T> {
 
     private int oldStatus = 0;
     private final ItemStack is;
@@ -68,9 +68,11 @@ public class DriveWatcher<T extends IAEStack<T>> extends MEInventoryHandler<T> {
             }
             if (this.drive.getProxy().isActive() && !(handler instanceof CreativeCellHandler)) {
                 try {
+                    long remainderSize = remainder == null ? 0 : remainder.getStackSize();
+                    T changeStack = IAEStack.copy(input, input.getStackSize() - remainderSize);
+
                     this.drive.getProxy().getStorage().postAlterationOfStoredItems(this.getChannel(),
-                            Collections.singletonList(input.copy().setStackSize(
-                                    input.getStackSize() - (remainder == null ? 0 : remainder.getStackSize()))),
+                            Collections.singletonList(changeStack),
                             this.source);
                 } catch (GridAccessException e) {
                     e.printStackTrace();
@@ -94,8 +96,10 @@ public class DriveWatcher<T extends IAEStack<T>> extends MEInventoryHandler<T> {
             }
             if (this.drive.getProxy().isActive() && !(handler instanceof CreativeCellHandler)) {
                 try {
+                    T changeStack = IAEStack.copy(request, -extractable.getStackSize());
+
                     this.drive.getProxy().getStorage().postAlterationOfStoredItems(this.getChannel(),
-                            Collections.singletonList(request.copy().setStackSize(-extractable.getStackSize())),
+                            Collections.singletonList(changeStack),
                             this.source);
                 } catch (GridAccessException e) {
                     e.printStackTrace();

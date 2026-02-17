@@ -78,7 +78,9 @@ public class JEIMissingItem implements IRecipeTransferError {
                                                     }
                                                 }
                                                 found = true;
-                                                used.add(itemStack.copy().setStackSize(1));
+                                                IAEItemStack usedCopy = itemStack.copy();
+                                                usedCopy.setStackSize(1);
+                                                used.add(usedCopy);
                                             }
                                         }
                                     }
@@ -88,7 +90,9 @@ public class JEIMissingItem implements IRecipeTransferError {
                                         IAEItemStack usedStack = used.findPrecise(ext);
                                         if (ext.getStackSize() > 0 && (usedStack == null
                                                 || ext.getStackSize() > usedStack.getStackSize())) {
-                                            used.add(ext.copy().setStackSize(1));
+                                            IAEItemStack usedCopy = ext.copy();
+                                            usedCopy.setStackSize(1);
+                                            used.add(usedCopy);
                                             found = true;
                                         }
                                     }
@@ -171,8 +175,12 @@ public class JEIMissingItem implements IRecipeTransferError {
                                                     }
                                                 }
                                                 found = true;
-                                                used.add(itemStack.copy().setStackSize(1));
-                                                valid.add(itemStack.copy().setStackSize(1));
+                                                IAEItemStack usedCopy = itemStack.copy();
+                                                usedCopy.setStackSize(1);
+                                                used.add(usedCopy);
+                                                IAEItemStack validCopy = itemStack.copy();
+                                                validCopy.setStackSize(1);
+                                                valid.add(validCopy);
                                             } else {
                                                 if (itemStack.isCraftable()) {
                                                     craftable = true;
@@ -186,14 +194,20 @@ public class JEIMissingItem implements IRecipeTransferError {
                                         IAEItemStack usedStack = used.findPrecise(ext);
                                         if (ext.getStackSize() > 0 && (usedStack == null
                                                 || usedStack.getStackSize() < ext.getStackSize())) {
-                                            used.add(ext.copy().setStackSize(1));
+                                            IAEItemStack usedCopy = ext.copy();
+                                            usedCopy.setStackSize(1);
+                                            used.add(usedCopy);
                                             if (craftable) {
                                                 valid.resetStatus();
                                             }
-                                            valid.add(ext.copy().setStackSize(1));
+                                            IAEItemStack validCopy = ext.copy();
+                                            validCopy.setStackSize(1);
+                                            valid.add(validCopy);
                                             found = true;
                                         } else if (ext.isCraftable()) {
-                                            valid.add(ext.copy().setStackSize(1));
+                                            IAEItemStack validCopy = ext.copy();
+                                            validCopy.setStackSize(1);
+                                            valid.add(validCopy);
                                             craftable = true;
                                         }
                                     }

@@ -106,7 +106,9 @@ public class CraftingTreeProcess {
                                         requestAmount = remaining;
                                         wantedSize -= remaining;
                                     }
-                                    subs = subs.copy().setStackSize(requestAmount);
+                                    IAEItemStack subsCopy = subs.copy();
+                                    subsCopy.setStackSize(requestAmount);
+                                    subs = subsCopy;
                                     CraftingTreeNode node = new CraftingTreeNode(cc, job, subs, this, x, depth + 1);
                                     this.nodes.put(node, requestAmount);
                                     if (wantedSize == 0) {
@@ -132,7 +134,9 @@ public class CraftingTreeProcess {
                                     requestAmount = remaining;
                                     wantedSize -= remaining;
                                 }
-                                part = part.copy().setStackSize(requestAmount);
+                                IAEItemStack partCopy = part.copy();
+                                partCopy.setStackSize(requestAmount);
+                                part = partCopy;
                                 this.nodes.put(new CraftingTreeNode(cc, job, part, this, x, depth + 1), requestAmount);
                             }
                         }
@@ -156,7 +160,9 @@ public class CraftingTreeProcess {
                                         }
                                     }
                                     if (prioritizedIAE != null) {
-                                        subs = subs.copy().setStackSize(wantedSize);
+                                        IAEItemStack subsCopy = subs.copy();
+                                        subsCopy.setStackSize(wantedSize);
+                                        subs = subsCopy;
                                         CraftingTreeNode node = new CraftingTreeNode(cc, job, subs, this, x, depth + 1);
                                         this.nodes.put(node, wantedSize);
                                         wantedSize = 0;
@@ -167,7 +173,9 @@ public class CraftingTreeProcess {
                         }
                     }
                     if (wantedSize > 0) {
-                        part = part.copy().setStackSize(wantedSize);
+                        IAEItemStack partCopy = part.copy();
+                        partCopy.setStackSize(wantedSize);
+                        part = partCopy;
                         // use the first slot...
                         this.nodes.put(new CraftingTreeNode(cc, job, part, this, x, depth + 1), wantedSize);
                         wantedSize = 0;

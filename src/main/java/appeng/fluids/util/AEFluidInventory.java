@@ -108,7 +108,9 @@ public class AEFluidInventory implements IAEFluidTank {
 
         if (doFill) {
             if (fluid == null) {
-                this.setFluidInSlot(slot, AEFluidStack.fromFluidStack(resource).setStackSize(amountToStore));
+                IAEFluidStack newFluid = AEFluidStack.fromFluidStack(resource);
+                newFluid.setStackSize(amountToStore);
+                this.setFluidInSlot(slot, newFluid);
             } else {
                 fluid.setStackSize(fluid.getStackSize() + amountToStore);
                 this.onContentChanged(slot, InvOperation.INSERT, resource, null);

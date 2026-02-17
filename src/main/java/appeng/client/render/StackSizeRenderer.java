@@ -34,6 +34,7 @@ import appeng.util.ReadableNumberConverter;
  * @author thatsIch
  * @version rv2
  * @since rv0
+ * @deprecated use {@link appeng.client.render.AEStackSizeRenderer}
  */
 @Deprecated
 public class StackSizeRenderer {

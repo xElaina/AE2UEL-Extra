@@ -81,10 +81,9 @@ public class PortableCellViewer extends MEMonitorHandler<IAEItemStack> implement
         final IAEItemStack injected = super.injectItems(input, mode, src);
 
         if (mode == Actionable.MODULATE && (injected == null || injected.getStackSize() != size)) {
-            this.notifyListenersOfChange(
-                    Collections.singletonList(input.copy()
-                            .setStackSize(input.getStackSize() - (injected == null ? 0 : injected.getStackSize()))),
-                    null);
+            IAEItemStack change = input.copy();
+            change.setStackSize(input.getStackSize() - (injected == null ? 0 : injected.getStackSize()));
+            this.notifyListenersOfChange(Collections.singletonList(change), null);
         }
 
         return injected;
@@ -95,15 +94,16 @@ public class PortableCellViewer extends MEMonitorHandler<IAEItemStack> implement
         final IAEItemStack extractable = super.extractItems(request, mode, src);
 
         if (mode == Actionable.MODULATE && extractable != null) {
-            this.notifyListenersOfChange(
-                    Collections.singletonList(request.copy().setStackSize(-extractable.getStackSize())), null);
+            IAEItemStack change = request.copy();
+            change.setStackSize(-extractable.getStackSize());
+            this.notifyListenersOfChange(Collections.singletonList(change), null);
         }
 
         return extractable;
     }
 
     @Override
-    public <T extends IAEStack<T>> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
+    public <T extends IAEStack> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
         if (channel == AEApi.instance().storage().getStorageChannel(IItemStorageChannel.class)) {
             return (IMEMonitor<T>) this;
         }

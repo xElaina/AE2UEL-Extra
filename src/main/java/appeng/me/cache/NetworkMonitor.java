@@ -42,7 +42,7 @@ import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemList;
 import appeng.me.storage.ItemWatcher;
 
-public class NetworkMonitor<T extends IAEStack<T>> implements IMEMonitor<T> {
+public class NetworkMonitor<T extends IAEStack> implements IMEMonitor<T> {
     @Nonnull
     private static final HashMap<IActionSource, LinkedList<NetworkMonitor<?>>> src2MonitorsMap = new HashMap<>();
     private static final Set<IActionSource> nestingSources = new HashSet<>();
@@ -214,11 +214,10 @@ public class NetworkMonitor<T extends IAEStack<T>> implements IMEMonitor<T> {
                 final Collection<ItemWatcher> list = this.myGridCache.getInterestManager().get(change);
 
                 if (!list.isEmpty()) {
-                    IAEStack<T> fullStack = this.getStorageList().findPrecise(change);
+                    IAEStack fullStack = this.getStorageList().findPrecise(change);
 
                     if (fullStack == null) {
-                        fullStack = change.copy();
-                        fullStack.setStackSize(0);
+                        fullStack = IAEStack.copy(change, 0);
                     }
 
                     this.myGridCache.getInterestManager().enableTransactions();
@@ -266,11 +265,10 @@ public class NetworkMonitor<T extends IAEStack<T>> implements IMEMonitor<T> {
                 final Collection<ItemWatcher> list = this.myGridCache.getInterestManager().get(stack);
 
                 if (!list.isEmpty()) {
-                    IAEStack<T> fullStack = this.getStorageList().findPrecise(stack);
+                    IAEStack fullStack = this.getStorageList().findPrecise(stack);
 
                     if (fullStack == null) {
-                        fullStack = stack.copy();
-                        fullStack.setStackSize(0);
+                        fullStack = IAEStack.copy(stack, 0);
                     }
 
                     this.myGridCache.getInterestManager().enableTransactions();

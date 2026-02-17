@@ -22,7 +22,7 @@ import appeng.api.util.AEPartLocation;
 import appeng.api.util.IConfigManager;
 import appeng.helpers.IPriorityHost;
 
-public abstract class PartAbstractFormationPlane<T extends IAEStack<T>> extends PartUpgradeable
+public abstract class PartAbstractFormationPlane<T extends IAEStack> extends PartUpgradeable
         implements ICellContainer, IPriorityHost, IMEInventory<T> {
 
     private boolean wasActive = false;

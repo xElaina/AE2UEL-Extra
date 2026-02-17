@@ -317,9 +317,9 @@ public class TileIOPort extends AENetworkInvTile implements IUpgradeableHost, IC
                 if (!is.isEmpty()) {
                     boolean shouldMove = true;
 
-                    for (IStorageChannel<? extends IAEStack<?>> c : AEApi.instance().storage().storageChannels()) {
+                    for (IStorageChannel<? extends IAEStack> c : AEApi.instance().storage().storageChannels()) {
                         if (itemsToMove > 0) {
-                            final IMEMonitor<? extends IAEStack<?>> network = this.getProxy().getStorage()
+                            final IMEMonitor<? extends IAEStack> network = this.getProxy().getStorage()
                                     .getInventory(c);
                             final IMEInventory<?> inv = this.getInv(is, c);
 
@@ -368,7 +368,7 @@ public class TileIOPort extends AENetworkInvTile implements IUpgradeableHost, IC
             this.currentCell = is;
             this.cachedInventories = new IdentityHashMap<>();
 
-            for (IStorageChannel<? extends IAEStack<?>> c : AEApi.instance().storage().storageChannels()) {
+            for (IStorageChannel<? extends IAEStack> c : AEApi.instance().storage().storageChannels()) {
                 this.cachedInventories.put(c, AEApi.instance().registries().cell().getCellInventory(is, null, c));
             }
         }
@@ -405,10 +405,8 @@ public class TileIOPort extends AENetworkInvTile implements IUpgradeableHost, IC
                     }
 
                     if (possible > 0) {
-                        IAEStack injectable = s.copy();
-
                         possible = Math.min(possible, itemsToMove);
-                        injectable.setStackSize(possible);
+                        IAEStack injectable = IAEStack.copy(s, possible);
 
                         final IAEStack extracted = src.extractItems(injectable, Actionable.MODULATE, this.mySrc);
                         if (extracted != null) {
@@ -474,8 +472,7 @@ public class TileIOPort extends AENetworkInvTile implements IUpgradeableHost, IC
 
         final IAEStack test = myList.getFirstItem();
         if (test != null) {
-            IAEStack testCopy = test.copy();
-            testCopy.setStackSize(1);
+            IAEStack testCopy = IAEStack.copy(test, 1);
             return src.injectItems(testCopy, Actionable.SIMULATE, this.mySrc) != null;
         }
         return false;

@@ -17,7 +17,7 @@ import appeng.core.AEConfig;
 import appeng.core.AELog;
 import appeng.util.item.AEStack;
 
-public class BasicCellInventory<T extends IAEStack<T>> extends AbstractCellInventory<T> {
+public class BasicCellInventory<T extends IAEStack> extends AbstractCellInventory<T> {
     private final IStorageChannel<T> channel;
 
     private BasicCellInventory(final IStorageCell<T> cellType, final ItemStack o, final ISaveProvider container) {
@@ -25,7 +25,7 @@ public class BasicCellInventory<T extends IAEStack<T>> extends AbstractCellInven
         this.channel = cellType.getChannel();
     }
 
-    public static <T extends IAEStack<T>> ICellInventory<T> createInventory(final ItemStack o,
+    public static <T extends IAEStack> ICellInventory<T> createInventory(final ItemStack o,
             final ISaveProvider container) {
         try {
             if (o == null) {
@@ -122,7 +122,7 @@ public class BasicCellInventory<T extends IAEStack<T>> extends AbstractCellInven
             }
 
             if (input.getStackSize() > remainingItemCount) {
-                final T r = input.copy();
+                final T r = IAEStack.copy(input);
                 r.setStackSize(r.getStackSize() - remainingItemCount);
                 if (mode == Actionable.MODULATE) {
                     l.setStackSize(l.getStackSize() + remainingItemCount);
@@ -144,10 +144,10 @@ public class BasicCellInventory<T extends IAEStack<T>> extends AbstractCellInven
                     - (long) this.getBytesPerType() * this.itemsPerByte;
             if (remainingItemCount > 0) {
                 if (input.getStackSize() > remainingItemCount) {
-                    final T toReturn = input.copy();
+                    final T toReturn = IAEStack.copy(input);
                     toReturn.setStackSize(input.getStackSize() - remainingItemCount);
                     if (mode == Actionable.MODULATE) {
-                        final T toWrite = input.copy();
+                        final T toWrite = IAEStack.copy(input);
                         toWrite.setStackSize(remainingItemCount);
 
                         this.cellItems.add(toWrite);
@@ -180,7 +180,7 @@ public class BasicCellInventory<T extends IAEStack<T>> extends AbstractCellInven
 
         final T l = this.getCellItems().findPrecise(request);
         if (l != null) {
-            Results = l.copy();
+            Results = IAEStack.copy(l);
 
             if (l.getStackSize() <= size) {
                 Results.setStackSize(l.getStackSize());

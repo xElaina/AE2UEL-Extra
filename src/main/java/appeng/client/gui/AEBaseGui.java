@@ -72,7 +72,7 @@ import appeng.client.gui.widgets.ITooltip;
 import appeng.client.me.InternalSlotME;
 import appeng.client.me.SlotDisconnected;
 import appeng.client.me.SlotME;
-import appeng.client.render.StackSizeRenderer;
+import appeng.client.render.AEStackSizeRenderer;
 import appeng.container.AEBaseContainer;
 import appeng.container.slot.*;
 import appeng.container.slot.AppEngSlot.hasCalculatedValidness;
@@ -81,7 +81,6 @@ import appeng.core.AppEng;
 import appeng.core.sync.network.NetworkHandler;
 import appeng.core.sync.packets.PacketInventoryAction;
 import appeng.core.sync.packets.PacketSwapSlots;
-import appeng.fluids.client.render.FluidStackSizeRenderer;
 import appeng.fluids.container.slots.IMEFluidSlot;
 import appeng.helpers.InventoryAction;
 import appeng.items.misc.ItemEncodedPattern;
@@ -93,8 +92,7 @@ public abstract class AEBaseGui extends GuiContainer implements IMTModGuiContain
     private final List<InternalSlotME> meSlots = new ArrayList<>();
     // drag y
     private final Set<Slot> drag_click = new HashSet<>();
-    private final StackSizeRenderer stackSizeRenderer = new StackSizeRenderer();
-    private final FluidStackSizeRenderer fluidStackSizeRenderer = new FluidStackSizeRenderer();
+    private final AEStackSizeRenderer stackSizeRenderer = new AEStackSizeRenderer();
     private GuiScrollbar myScrollBar = null;
     private boolean disableShiftClick = false;
     private Stopwatch dbl_clickTimer = Stopwatch.createStarted();
@@ -853,7 +851,7 @@ public abstract class AEBaseGui extends GuiContainer implements IMTModGuiContain
                 GlStateManager.enableLighting();
                 GlStateManager.enableBlend();
 
-                this.fluidStackSizeRenderer.renderStackSize(this.fontRenderer, fs, s.xPos, s.yPos);
+                this.stackSizeRenderer.renderStackSize(this.fontRenderer, fs, s.xPos, s.yPos);
             } else if (!this.isPowered()) {
                 drawRect(s.xPos, s.yPos, 16 + s.xPos, 16 + s.yPos, 0x66111111);
             }

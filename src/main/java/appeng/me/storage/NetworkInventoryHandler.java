@@ -34,7 +34,7 @@ import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemList;
 import appeng.me.cache.SecurityCache;
 
-public class NetworkInventoryHandler<T extends IAEStack<T>> implements IMEInventoryHandler<T> {
+public class NetworkInventoryHandler<T extends IAEStack> implements IMEInventoryHandler<T> {
 
     private static final ThreadLocal<Deque> DEPTH_MOD = new ThreadLocal<>();
     private static final ThreadLocal<Deque> DEPTH_SIM = new ThreadLocal<>();
@@ -216,8 +216,8 @@ public class NetworkInventoryHandler<T extends IAEStack<T>> implements IMEInvent
 
         final Iterator<List<IMEInventoryHandler<T>>> i = this.priorityInventory.descendingMap().values().iterator();// priorityInventory.asMap().descendingMap().entrySet().iterator();
 
-        final T output = request.copy();
-        request = request.copy();
+        final T output = IAEStack.copy(request);
+        request = IAEStack.copy(request);
         output.setStackSize(0);
         final long req = request.getStackSize();
 
@@ -229,7 +229,8 @@ public class NetworkInventoryHandler<T extends IAEStack<T>> implements IMEInvent
                 final IMEInventoryHandler<T> inv = ii.next();
 
                 request.setStackSize(req - output.getStackSize());
-                output.add(inv.extractItems(request, mode, src));
+                T extracted = inv.extractItems(request, mode, src);
+                IAEStack.add(output, extracted);
             }
         }
 
@@ -239,7 +240,8 @@ public class NetworkInventoryHandler<T extends IAEStack<T>> implements IMEInvent
                 final IMEInventoryHandler<T> inv = jj.next();
 
                 request.setStackSize(req - output.getStackSize());
-                output.add(inv.extractItems(request, mode, src));
+                T extracted = inv.extractItems(request, mode, src);
+                IAEStack.add(output, extracted);
             }
         }
 

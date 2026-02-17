@@ -43,7 +43,7 @@ import appeng.api.storage.data.IItemList;
  *
  * @param <T> TODO: Needs to be redesigned to solve performance issues.
  */
-public class MEMonitorHandler<T extends IAEStack<T>> implements IMEMonitor<T> {
+public class MEMonitorHandler<T extends IAEStack> implements IMEMonitor<T> {
 
     private final IMEInventoryHandler<T> internalHandler;
     private final IItemList<T> cachedList;

@@ -32,6 +32,7 @@ import appeng.api.config.ViewItems;
 import appeng.api.config.YesNo;
 import appeng.api.storage.channels.IFluidStorageChannel;
 import appeng.api.storage.data.IAEFluidStack;
+import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemList;
 import appeng.client.gui.widgets.IScrollSource;
 import appeng.client.gui.widgets.ISortSource;
@@ -155,7 +156,7 @@ public class FluidRepo {
 
         if (st != null) {
             st.reset();
-            st.add(is);
+            IAEStack.add(st, is);
         } else {
             this.list.add(is);
         }

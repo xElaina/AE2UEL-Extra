@@ -84,7 +84,7 @@ public interface ICellRegistry {
      * @return the handler registered for this channel.
      */
     @Nullable
-    <T extends IAEStack<T>> ICellGuiHandler getGuiHandler(IStorageChannel<T> channel, ItemStack is);
+    <T extends IAEStack> ICellGuiHandler getGuiHandler(IStorageChannel<T> channel, ItemStack is);
 
     /**
      * returns an ICellInventoryHandler for the provided item by querying all registered handlers.
@@ -96,6 +96,6 @@ public interface ICellRegistry {
      * @return new ICellInventoryHandler, or null if there isn't one.
      */
     @Nullable
-    <T extends IAEStack<T>> ICellInventoryHandler<T> getCellInventory(ItemStack is, ISaveProvider host,
+    <T extends IAEStack> ICellInventoryHandler<T> getCellInventory(ItemStack is, ISaveProvider host,
             IStorageChannel<T> chan);
 }

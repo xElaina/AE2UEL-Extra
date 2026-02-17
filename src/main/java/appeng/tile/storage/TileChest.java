@@ -205,7 +205,7 @@ public class TileChest extends AENetworkPowerTile
         }
     }
 
-    private <T extends IAEStack<T>> ChestMonitorHandler<T> wrap(final IMEInventoryHandler<T> h) {
+    private <T extends IAEStack> ChestMonitorHandler<T> wrap(final IMEInventoryHandler<T> h) {
         if (h == null) {
             return null;
         }
@@ -388,7 +388,7 @@ public class TileChest extends AENetworkPowerTile
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends IAEStack<T>> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
+    public <T extends IAEStack> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
         this.updateHandler();
 
         if (this.cellHandler != null && this.cellHandler.getChannel() == channel) {
@@ -552,7 +552,7 @@ public class TileChest extends AENetworkPowerTile
         this.world.markChunkDirty(this.pos, this);
     }
 
-    private class ChestNetNotifier<T extends IAEStack<T>> implements IMEMonitorHandlerReceiver<T> {
+    private class ChestNetNotifier<T extends IAEStack> implements IMEMonitorHandlerReceiver<T> {
 
         private final IStorageChannel<T> chan;
 
@@ -588,7 +588,7 @@ public class TileChest extends AENetworkPowerTile
         }
     }
 
-    private class ChestMonitorHandler<T extends IAEStack<T>> extends MEMonitorHandler<T> {
+    private class ChestMonitorHandler<T extends IAEStack> extends MEMonitorHandler<T> {
 
         public ChestMonitorHandler(final IMEInventoryHandler<T> t) {
             super(t);
@@ -610,9 +610,12 @@ public class TileChest extends AENetworkPowerTile
             T injected = super.injectItems(input, mode, src);
             if (mode == Actionable.MODULATE && (injected == null || injected.getStackSize() != input.getStackSize())) {
                 if (TileChest.this.isPowered() && this.getInternalHandler().getCellInv() != null) {
+                    long injectedSize = injected == null ? 0 : injected.getStackSize();
+                    T copiedStack = IAEStack.copy(input);
+                    copiedStack.setStackSize(input.getStackSize() - injectedSize);
+
                     TileChest.this.cellHandler.postChangesToListeners(
-                            Collections.singletonList(input.copy().setStackSize(
-                                    input.getStackSize() - (injected == null ? 0 : injected.getStackSize()))),
+                            Collections.singletonList(copiedStack),
                             TileChest.this.mySrc);
                 }
             }
@@ -652,8 +655,10 @@ public class TileChest extends AENetworkPowerTile
             T extracted = super.extractItems(request, mode, src);
             if (mode == Actionable.MODULATE && extracted != null) {
                 if (TileChest.this.isPowered() && this.getInternalHandler().getCellInv() != null) {
+                    T changeStack = IAEStack.copy(request, -extracted.getStackSize());
+
                     TileChest.this.cellHandler.postChangesToListeners(
-                            Collections.singletonList(request.copy().setStackSize(-extracted.getStackSize())),
+                            Collections.singletonList(changeStack),
                             TileChest.this.mySrc);
                 }
             }

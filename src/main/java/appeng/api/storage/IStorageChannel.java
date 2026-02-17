@@ -32,20 +32,25 @@ import io.netty.buffer.ByteBuf;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemList;
 
-public interface IStorageChannel<T extends IAEStack<T>> {
+public interface IStorageChannel<T extends IAEStack> {
+
+    /**
+     * @return The unique ID of this storage channel.
+     */
+    @Nonnull
+    ResourceLocation getId();
 
     /**
      * Can be used as factor for transferring stacks of a channel.
      * <p>
      * E.g. used by IO Ports to transfer 1000 mB, not 1 mB to match the item channel transferring a full bucket per
      * operation.
-     * 
-     * @return
      */
     default int transferFactor() {
         return 1;
@@ -63,8 +68,6 @@ public interface IStorageChannel<T extends IAEStack<T>> {
 
     /**
      * Create a new {@link IItemList} of the specific type.
-     * 
-     * @return
      */
     @Nonnull
     IItemList<T> createList();
@@ -74,30 +77,23 @@ public interface IStorageChannel<T extends IAEStack<T>> {
      * <p>
      * The parameter is unbound to allow a slightly more flexible approach. But the general intention is about
      * converting an {@link ItemStack} or {@link FluidStack} into the corresponding {@link IAEStack}. Another valid case
-     * might be to use it instead of {@link IAEStack#copy()}, but this might not be supported by all types. IAEStacks
-     * that use custom items for {@link IAEStack#asItemStackRepresentation()} must also be able to convert these.
-     * 
+     * might be to use it instead of {@link IAEStack#copy}, but this might not be supported by all types. IAEStacks that
+     * use custom items for {@link IAEStack#asItemStackRepresentation()} must also be able to convert these.
+     *
      * @param input The object to turn into an {@link IAEStack}
      * @return The converted stack or null
      */
     @Nullable
     T createStack(@Nonnull Object input);
 
-    /**
-     * 
-     * @param input
-     * @return
-     * @throws IOException
-     */
     @Nullable
     T readFromPacket(@Nonnull ByteBuf input) throws IOException;
 
     /**
      * create from nbt data
-     * 
-     * @param nbt
-     * @return
      */
     @Nullable
     T createFromNBT(@Nonnull NBTTagCompound nbt);
+
+    T copy(T stack);
 }

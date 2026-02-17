@@ -29,7 +29,7 @@ import net.minecraftforge.items.IItemHandler;
 import appeng.api.config.FuzzyMode;
 import appeng.api.storage.data.IAEStack;
 
-public interface ICellInventory<T extends IAEStack<T>> extends IMEInventory<T> {
+public interface ICellInventory<T extends IAEStack> extends IMEInventory<T> {
 
     /**
      * @return the item stack of this storage cell.

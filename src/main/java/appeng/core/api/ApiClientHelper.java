@@ -37,7 +37,7 @@ public class ApiClientHelper implements IClientHelper {
     private static final String[] NUMBER_FORMATS = new String[] { "#.000", "#.00", "#.0", "#" };
 
     @Override
-    public <T extends IAEStack<T>> void addCellInformation(ICellInventoryHandler<T> handler, List<String> lines) {
+    public <T extends IAEStack> void addCellInformation(ICellInventoryHandler<T> handler, List<String> lines) {
         if (handler == null) {
             return;
         }
@@ -123,7 +123,7 @@ public class ApiClientHelper implements IClientHelper {
             if (Minecraft.getMinecraft().gameSettings.advancedItemTooltips
                     || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
                 cellInventory.getAvailableItems((IItemList) itemList);
-                for (IAEStack<?> s : itemList) {
+                for (IAEStack s : itemList) {
                     if (s instanceof IAEItemStack) {
                         lines.add(((IAEItemStack) s).getDefinition().getDisplayName() + ": "
                                 + ReadableNumberConverter.INSTANCE.toWideReadableForm(s.getStackSize()));

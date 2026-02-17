@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.ForgeVersion;
@@ -105,6 +106,10 @@ public final class AppEng {
     @Mod.InstanceFactory
     public static AppEng instance() {
         return INSTANCE;
+    }
+
+    public static ResourceLocation makeId(String id) {
+        return new ResourceLocation(MOD_ID, id);
     }
 
     public Biome getStorageBiome() {

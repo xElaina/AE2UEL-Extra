@@ -145,7 +145,7 @@ public class PartFluidInterface extends PartBasicState
     }
 
     @Override
-    public <T extends IAEStack<T>> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
+    public <T extends IAEStack> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
         return this.duality.getInventory(channel);
     }
 

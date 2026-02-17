@@ -28,7 +28,7 @@ import appeng.api.storage.channels.IItemStorageChannel;
 import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemList;
 
-public class NullInventory<T extends IAEStack<T>> implements IMEInventoryHandler<T> {
+public class NullInventory<T extends IAEStack> implements IMEInventoryHandler<T> {
 
     @Override
     public T injectItems(final T input, final Actionable mode, final IActionSource src) {

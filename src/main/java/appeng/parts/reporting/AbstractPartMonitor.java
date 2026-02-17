@@ -190,12 +190,16 @@ public abstract class AbstractPartMonitor extends AbstractPartDisplay
             if (fluidInTank == null) {
                 this.configuredFluid = null;
                 if (!eq.isEmpty()) {
-                    this.configuredItem = AEItemStack.fromItemStack(eq).setStackSize(0);
+                    this.configuredItem = AEItemStack.fromItemStack(eq);
+                    if (this.configuredItem != null) {
+                        this.configuredItem.setStackSize(0);
+                    }
                 } else {
                     this.configuredItem = null;
                 }
             } else if (fluidInTank.amount > 0) {
-                this.configuredFluid = AEFluidStack.fromFluidStack(fluidInTank).setStackSize(0);
+                this.configuredFluid = AEFluidStack.fromFluidStack(fluidInTank);
+                this.configuredFluid.setStackSize(0);
                 this.configuredItem = null;
             }
 
@@ -262,7 +266,7 @@ public abstract class AbstractPartMonitor extends AbstractPartDisplay
         }
     }
 
-    private <T extends IAEStack<T>> void updateReportingValue(final IMEMonitor<T> monitor) {
+    private <T extends IAEStack> void updateReportingValue(final IMEMonitor<T> monitor) {
         if (this.configuredItem != null) {
             final IAEItemStack result = (IAEItemStack) monitor.getStorageList().findPrecise((T) this.configuredItem);
             if (result == null) {
@@ -291,7 +295,7 @@ public abstract class AbstractPartMonitor extends AbstractPartDisplay
             return;
         }
 
-        IAEStack<?> ais = this.getDisplayed();
+        IAEStack ais = this.getDisplayed();
 
         if (ais == null) {
             return;
@@ -318,7 +322,7 @@ public abstract class AbstractPartMonitor extends AbstractPartDisplay
     }
 
     @Override
-    public IAEStack<?> getDisplayed() {
+    public IAEStack getDisplayed() {
         if (this.configuredItem != null)
             return this.configuredItem;
         else if (this.configuredFluid != null)
@@ -352,7 +356,7 @@ public abstract class AbstractPartMonitor extends AbstractPartDisplay
     }
 
     @Override
-    public void onStackChange(IItemList<?> o, IAEStack<?> fullStack, IAEStack<?> diffStack, IActionSource src,
+    public void onStackChange(IItemList<?> o, IAEStack fullStack, IAEStack diffStack, IActionSource src,
             IStorageChannel<?> chan) {
         this.configuredAmount = fullStack.getStackSize();
 

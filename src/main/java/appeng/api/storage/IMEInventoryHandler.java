@@ -32,7 +32,7 @@ import appeng.api.storage.data.IAEStack;
  *
  * @param <T>
  */
-public interface IMEInventoryHandler<T extends IAEStack<T>> extends IMEInventory<T> {
+public interface IMEInventoryHandler<T extends IAEStack> extends IMEInventory<T> {
 
     /**
      * determine if items can be injected/extracted.
@@ -93,5 +93,20 @@ public interface IMEInventoryHandler<T extends IAEStack<T>> extends IMEInventory
      */
     default boolean isSticky() {
         return false;
+    }
+
+    /**
+     * Convenience method to cast inventory handlers with wildcard generic types to the concrete type used by the given
+     * storage channel, but only if the given storage channel is equal to {@link #getChannel()}.
+     *
+     * @throws IllegalArgumentException If channel is not equal to {@link #getChannel()}.
+     */
+    @SuppressWarnings("unchecked")
+    default <SC extends IAEStack> IMEInventoryHandler<SC> cast(IStorageChannel<SC> channel) {
+        if (getChannel() == channel) {
+            return (IMEInventoryHandler<SC>) this;
+        }
+        throw new IllegalArgumentException("The inventories storage channel " + getChannel()
+                + " is not compatible with " + channel);
     }
 }

@@ -593,8 +593,8 @@ public class TileMolecularAssembler extends AENetworkInvTile
                 if (remainder.getStackSize() == toInsert.getStackSize()) {
                     return output;
                 }
-                inv.injectItems(toInsert.setStackSize(toInsert.getStackSize() - remainder.getStackSize()),
-                        Actionable.MODULATE, this.mySrc);
+                toInsert.setStackSize(toInsert.getStackSize() - remainder.getStackSize());
+                inv.injectItems(toInsert, Actionable.MODULATE, this.mySrc);
                 this.saveChanges();
                 return remainder.createItemStack();
             }

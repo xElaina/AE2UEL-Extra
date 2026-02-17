@@ -44,7 +44,7 @@ import appeng.core.sync.packets.PacketInformPlayer;
 import appeng.me.cluster.implementations.CraftingCPUCluster;
 import appeng.util.Platform;
 import appeng.util.item.AEItemStack;
-import appeng.util.item.MeaningfulItemIterator;
+import appeng.util.iterators.MeaningfulStackIterator;
 
 public class CraftingTreeNode {
 
@@ -119,7 +119,7 @@ public class CraftingTreeNode {
             if (this.parent.details.canSubstitute()) {
                 for (IAEItemStack subs : this.parent.details.getSubstituteInputs(this.slot)) {
                     if (damageableItem) {
-                        Iterator<IAEItemStack> it = new MeaningfulItemIterator<>(
+                        Iterator<IAEItemStack> it = new MeaningfulStackIterator<>(
                                 inventoryList.findFuzzy(this.what, FuzzyMode.IGNORE_ALL));
                         while (it.hasNext()) {
                             IAEItemStack i = it.next();
@@ -135,7 +135,7 @@ public class CraftingTreeNode {
                 }
             } else {
                 if (damageableItem) {
-                    Iterator<IAEItemStack> it = new MeaningfulItemIterator<>(
+                    Iterator<IAEItemStack> it = new MeaningfulStackIterator<>(
                             inventoryList.findFuzzy(this.what, FuzzyMode.IGNORE_ALL));
                     while (it.hasNext()) {
                         IAEItemStack i = it.next();
@@ -285,7 +285,9 @@ public class CraftingTreeNode {
         if (job.isSimulation()) {
             this.bytes += l;
             if (parent != null && this.what.getItem().hasContainerItem(this.what.getDefinition())) {
-                final ItemStack is2 = Platform.getContainerItem(this.what.copy().setStackSize(1).createItemStack());
+                final IAEItemStack tempStack = this.what.copy();
+                tempStack.setStackSize(1);
+                final ItemStack is2 = Platform.getContainerItem(tempStack.createItemStack());
                 final IAEItemStack o = AEItemStack.fromItemStack(is2);
 
                 if (o != null) {
@@ -376,7 +378,8 @@ public class CraftingTreeNode {
         }
 
         if (this.howManyEmitted > 0) {
-            final IAEItemStack i = this.what.copy().reset();
+            final IAEItemStack i = this.what.copy();
+            i.reset();
             i.setStackSize(this.howManyEmitted);
             craftingCPUCluster.addEmitable(i);
         }

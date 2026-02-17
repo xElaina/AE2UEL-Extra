@@ -497,7 +497,8 @@ public class DualityInterface implements IGridTickable, IStorageMonitorable, IIn
         if (req == null && !stored.isEmpty()) {
             final IAEItemStack work = AEApi.instance().storage().getStorageChannel(IItemStorageChannel.class)
                     .createStack(stored);
-            this.requireWork[slot] = work.setStackSize(-work.getStackSize());
+            work.setStackSize(-work.getStackSize());
+            this.requireWork[slot] = work;
             return;
         } else if (req != null) {
             if (stored.isEmpty()) // need to add stuff!
@@ -519,7 +520,8 @@ public class DualityInterface implements IGridTickable, IStorageMonitorable, IIn
             {
                 final IAEItemStack work = AEApi.instance().storage().getStorageChannel(IItemStorageChannel.class)
                         .createStack(stored);
-                this.requireWork[slot] = work.setStackSize(-work.getStackSize());
+                work.setStackSize(-work.getStackSize());
+                this.requireWork[slot] = work;
                 return;
             }
         }
@@ -934,7 +936,7 @@ public class DualityInterface implements IGridTickable, IStorageMonitorable, IIn
     }
 
     @Override
-    public <T extends IAEStack<T>> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
+    public <T extends IAEStack> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
         if (channel == AEApi.instance().storage().getStorageChannel(IItemStorageChannel.class)) {
             if (this.hasConfig()) {
                 if (resetConfigCache) {
@@ -1017,7 +1019,7 @@ public class DualityInterface implements IGridTickable, IStorageMonitorable, IIn
         return new IStorageMonitorable() {
 
             @Override
-            public <T extends IAEStack<T>> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
+            public <T extends IAEStack> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
                 if (channel == AEApi.instance().storage().getStorageChannel(IItemStorageChannel.class)) {
                     return (IMEMonitor<T>) new InterfaceInventory(di);
                 }

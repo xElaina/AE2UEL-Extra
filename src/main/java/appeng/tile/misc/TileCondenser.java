@@ -324,7 +324,7 @@ public class TileCondenser extends AEBaseInvTile implements IConfigManagerHost, 
         }
 
         @Override
-        public <T extends IAEStack<T>> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
+        public <T extends IAEStack> IMEMonitor<T> getInventory(IStorageChannel<T> channel) {
             if (channel == AEApi.instance().storage().getStorageChannel(IItemStorageChannel.class)) {
                 return (IMEMonitor<T>) this.itemInventory;
             } else {
