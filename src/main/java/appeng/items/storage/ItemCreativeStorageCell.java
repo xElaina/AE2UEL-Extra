@@ -27,12 +27,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 
-import appeng.api.AEApi;
 import appeng.api.config.FuzzyMode;
-import appeng.api.storage.ICellInventoryHandler;
-import appeng.api.storage.ICellWorkbenchItem;
-import appeng.api.storage.IMEInventoryHandler;
-import appeng.api.storage.StorageChannels;
+import appeng.api.storage.*;
 import appeng.items.AEBaseItem;
 import appeng.items.contents.CellConfig;
 
@@ -71,10 +67,7 @@ public class ItemCreativeStorageCell extends AEBaseItem implements ICellWorkbenc
     @Override
     public void addCheckedInformation(final ItemStack stack, final World world, final List<String> lines,
             final ITooltipFlag advancedTooltips) {
-        final IMEInventoryHandler<?> inventory = AEApi.instance()
-                .registries()
-                .cell()
-                .getCellInventory(stack, null, StorageChannels.items());
+        final IMEInventoryHandler<?> inventory = StorageCells.getCellInventory(stack, null, StorageChannels.items());
 
         if (inventory instanceof ICellInventoryHandler) {
             final CellConfig cc = new CellConfig(stack);

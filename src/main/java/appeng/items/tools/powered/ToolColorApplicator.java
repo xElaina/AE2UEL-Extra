@@ -54,10 +54,7 @@ import appeng.api.config.FuzzyMode;
 import appeng.api.implementations.items.IItemGroup;
 import appeng.api.implementations.items.IStorageCell;
 import appeng.api.implementations.tiles.IColorableTile;
-import appeng.api.storage.ICellInventoryHandler;
-import appeng.api.storage.IMEInventory;
-import appeng.api.storage.IStorageChannel;
-import appeng.api.storage.StorageChannels;
+import appeng.api.storage.*;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.storage.data.IItemList;
 import appeng.api.util.AEColor;
@@ -279,10 +276,7 @@ public class ToolColorApplicator extends AEBasePoweredItem
     }
 
     private IMEInventory<IAEItemStack> getInventory(ItemStack stack) {
-        return AEApi.instance()
-                .registries()
-                .cell()
-                .getCellInventory(stack, null, getChannel());
+        return StorageCells.getCellInventory(stack, null, getChannel());
     }
 
     public ItemStack getColor(final ItemStack is) {
@@ -429,10 +423,8 @@ public class ToolColorApplicator extends AEBasePoweredItem
             final ITooltipFlag advancedTooltips) {
         super.addCheckedInformation(stack, world, lines, advancedTooltips);
 
-        final ICellInventoryHandler<IAEItemStack> cdi = AEApi.instance()
-                .registries()
-                .cell()
-                .getCellInventory(stack, null, StorageChannels.items());
+        final ICellInventoryHandler<IAEItemStack> cdi = StorageCells.getCellInventory(stack, null,
+                StorageChannels.items());
 
         AEApi.instance().client().addCellInformation(cdi, lines);
     }

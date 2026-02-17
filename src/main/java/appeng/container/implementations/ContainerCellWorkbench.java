@@ -28,15 +28,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.EmptyHandler;
 
-import appeng.api.AEApi;
 import appeng.api.config.CopyMode;
 import appeng.api.config.FuzzyMode;
 import appeng.api.config.Settings;
 import appeng.api.implementations.items.IStorageCell;
-import appeng.api.storage.ICellWorkbenchItem;
-import appeng.api.storage.IMEInventory;
-import appeng.api.storage.IStorageChannel;
-import appeng.api.storage.StorageChannels;
+import appeng.api.storage.*;
 import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemList;
 import appeng.container.guisync.GuiSync;
@@ -201,7 +197,7 @@ public class ContainerCellWorkbench extends ContainerUpgradeable {
                 ? ((IStorageCell) is.getItem()).getChannel()
                 : StorageChannels.items();
 
-        final IMEInventory cellInv = AEApi.instance().registries().cell().getCellInventory(is, null, channel);
+        final IMEInventory cellInv = StorageCells.getCellInventory(is, null, channel);
 
         Iterator<IAEStack> i = new NullIterator<>();
         if (cellInv != null) {

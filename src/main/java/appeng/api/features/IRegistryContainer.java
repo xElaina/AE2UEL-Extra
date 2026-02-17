@@ -27,7 +27,6 @@ import appeng.api.AEInjectable;
 import appeng.api.movable.IMovableRegistry;
 import appeng.api.networking.IGridCacheRegistry;
 import appeng.api.parts.IPartModels;
-import appeng.api.storage.ICellRegistry;
 
 /**
  * @author AlgorithmX2
@@ -53,11 +52,6 @@ public interface IRegistryContainer {
      * Lets you register your items as wireless terminals
      */
     IWirelessTermRegistry wireless();
-
-    /**
-     * Allows you to register new cell types, these will function in drives
-     */
-    ICellRegistry cell();
 
     /**
      * Manage grinder recipes via API

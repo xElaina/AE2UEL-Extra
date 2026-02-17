@@ -28,7 +28,7 @@ import net.minecraft.item.ItemStack;
 import appeng.api.storage.data.IAEStack;
 
 /**
- * Registration record for {@link ICellRegistry}
+ * @see appeng.api.storage.StorageCells
  */
 public interface ICellHandler {
 

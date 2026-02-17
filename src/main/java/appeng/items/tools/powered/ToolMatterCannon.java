@@ -49,6 +49,7 @@ import appeng.api.config.Upgrades;
 import appeng.api.implementations.items.IStorageCell;
 import appeng.api.storage.ICellInventoryHandler;
 import appeng.api.storage.IStorageChannel;
+import appeng.api.storage.StorageCells;
 import appeng.api.storage.StorageChannels;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.storage.data.IItemList;
@@ -84,10 +85,8 @@ public class ToolMatterCannon extends AEBasePoweredItem implements IStorageCell<
             final ITooltipFlag advancedTooltips) {
         super.addCheckedInformation(stack, world, lines, advancedTooltips);
 
-        final ICellInventoryHandler<IAEItemStack> cdi = AEApi.instance()
-                .registries()
-                .cell()
-                .getCellInventory(stack, null, StorageChannels.items());
+        final ICellInventoryHandler<IAEItemStack> cdi = StorageCells.getCellInventory(stack, null,
+                StorageChannels.items());
 
         AEApi.instance().client().addCellInformation(cdi, lines);
     }
@@ -103,10 +102,8 @@ public class ToolMatterCannon extends AEBasePoweredItem implements IStorageCell<
                 shots += cu.getInstalledUpgrades(Upgrades.SPEED);
             }
 
-            final ICellInventoryHandler<IAEItemStack> inv = AEApi.instance()
-                    .registries()
-                    .cell()
-                    .getCellInventory(p.getHeldItem(hand), null, StorageChannels.items());
+            final ICellInventoryHandler<IAEItemStack> inv = StorageCells.getCellInventory(p.getHeldItem(hand), null,
+                    StorageChannels.items());
             if (inv != null) {
                 final IItemList<IAEItemStack> itemList = inv.getAvailableItems(StorageChannels.items().createList());
                 IAEItemStack req = itemList.getFirstItem();

@@ -23,13 +23,13 @@ import java.util.Collections;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import appeng.api.AEApi;
 import appeng.api.config.*;
 import appeng.api.implementations.guiobjects.IPortableCell;
 import appeng.api.implementations.items.IAEItemPowerStorage;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.storage.IMEMonitor;
 import appeng.api.storage.IStorageChannel;
+import appeng.api.storage.StorageCells;
 import appeng.api.storage.StorageChannels;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.storage.data.IAEStack;
@@ -46,7 +46,7 @@ public class PortableCellViewer extends MEMonitorHandler<IAEItemStack> implement
     private final int inventorySlot;
 
     public PortableCellViewer(final ItemStack is, final int slot) {
-        super(AEApi.instance().registries().cell().getCellInventory(is, null, StorageChannels.items()));
+        super(StorageCells.getCellInventory(is, null, StorageChannels.items()));
         this.ips = (IAEItemPowerStorage) is.getItem();
         this.target = is;
         this.inventorySlot = slot;

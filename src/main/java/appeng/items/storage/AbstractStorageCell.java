@@ -42,6 +42,7 @@ import appeng.api.implementations.items.IItemGroup;
 import appeng.api.implementations.items.IStorageCell;
 import appeng.api.implementations.items.IUpgradeModule;
 import appeng.api.storage.IMEInventoryHandler;
+import appeng.api.storage.StorageCells;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemList;
@@ -77,8 +78,7 @@ public abstract class AbstractStorageCell<T extends IAEStack> extends AEBaseItem
             final ITooltipFlag advancedTooltips) {
         AEApi.instance()
                 .client()
-                .addCellInformation(
-                        AEApi.instance().registries().cell().getCellInventory(stack, null, this.getChannel()), lines);
+                .addCellInformation(StorageCells.getCellInventory(stack, null, this.getChannel()), lines);
     }
 
     @Override
@@ -154,8 +154,7 @@ public abstract class AbstractStorageCell<T extends IAEStack> extends AEBaseItem
             }
 
             final InventoryPlayer playerInventory = player.inventory;
-            final IMEInventoryHandler inv = AEApi.instance().registries().cell().getCellInventory(stack, null,
-                    this.getChannel());
+            final IMEInventoryHandler inv = StorageCells.getCellInventory(stack, null, this.getChannel());
             if (inv != null && playerInventory.getCurrentItem() == stack) {
                 final InventoryAdaptor ia = InventoryAdaptor.getAdaptor(player);
                 final IItemList<IAEItemStack> list = inv.getAvailableItems(this.getChannel().createList());

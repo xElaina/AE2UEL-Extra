@@ -239,7 +239,7 @@ public class TileDrive extends AENetworkInvTile implements IChestOrDrive, IPrior
                 this.handlersBySlot[x] = null;
 
                 if (!is.isEmpty()) {
-                    this.handlersBySlot[x] = AEApi.instance().registries().cell().getHandler(is);
+                    this.handlersBySlot[x] = StorageCells.getHandler(is);
 
                     if (this.handlersBySlot[x] != null) {
                         for (IStorageChannel<? extends IAEStack> channel : storageChannels) {
@@ -322,7 +322,7 @@ public class TileDrive extends AENetworkInvTile implements IChestOrDrive, IPrior
 
         @Override
         public boolean allowInsert(IItemHandler inv, int slot, ItemStack stack) {
-            return !stack.isEmpty() && AEApi.instance().registries().cell().isCellHandled(stack);
+            return !stack.isEmpty() && StorageCells.isCellHandled(stack);
         }
 
     }

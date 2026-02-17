@@ -79,6 +79,7 @@ import appeng.api.networking.security.ISecurityGrid;
 import appeng.api.networking.spatial.ISpatialCache;
 import appeng.api.networking.storage.IStorageGrid;
 import appeng.api.networking.ticking.ITickManager;
+import appeng.api.storage.StorageCells;
 import appeng.bootstrap.ICriterionTriggerRegistry;
 import appeng.bootstrap.IModelRegistry;
 import appeng.bootstrap.components.*;
@@ -212,10 +213,10 @@ final class Registration {
         gcr.registerGridCache(ISecurityGrid.class, SecurityCache.class);
         gcr.registerGridCache(ICraftingGrid.class, CraftingGridCache.class);
 
-        registries.cell().addCellHandler(new BasicCellHandler());
-        registries.cell().addCellHandler(new CreativeCellHandler());
-        registries.cell().addCellGuiHandler(new BasicItemCellGuiHandler());
-        registries.cell().addCellGuiHandler(new BasicFluidCellGuiHandler());
+        StorageCells.addCellHandler(new BasicCellHandler());
+        StorageCells.addCellHandler(new CreativeCellHandler());
+        StorageCells.addCellGuiHandler(new BasicItemCellGuiHandler());
+        StorageCells.addCellGuiHandler(new BasicFluidCellGuiHandler());
 
         api.definitions().materials().matterBall().maybeStack(1).ifPresent(ammoStack -> {
             final double weight = 32;

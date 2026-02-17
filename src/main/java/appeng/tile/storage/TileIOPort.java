@@ -45,10 +45,7 @@ import appeng.api.networking.security.IActionSource;
 import appeng.api.networking.ticking.IGridTickable;
 import appeng.api.networking.ticking.TickRateModulation;
 import appeng.api.networking.ticking.TickingRequest;
-import appeng.api.storage.IMEInventory;
-import appeng.api.storage.IMEMonitor;
-import appeng.api.storage.IStorageChannel;
-import appeng.api.storage.StorageChannels;
+import appeng.api.storage.*;
 import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemList;
 import appeng.api.util.AECableType;
@@ -370,7 +367,7 @@ public class TileIOPort extends AENetworkInvTile implements IUpgradeableHost, IC
             this.cachedInventories = new IdentityHashMap<>();
 
             for (IStorageChannel<? extends IAEStack> c : StorageChannels.getAll()) {
-                this.cachedInventories.put(c, AEApi.instance().registries().cell().getCellInventory(is, null, c));
+                this.cachedInventories.put(c, StorageCells.getCellInventory(is, null, c));
             }
         }
 

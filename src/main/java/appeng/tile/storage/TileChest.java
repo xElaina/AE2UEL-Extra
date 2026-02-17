@@ -177,7 +177,7 @@ public class TileChest extends AENetworkPowerTile
             final ItemStack is = this.getCell();
             if (!is.isEmpty()) {
                 this.isCached = true;
-                ICellHandler cellHandler = AEApi.instance().registries().cell().getHandler(is);
+                ICellHandler cellHandler = StorageCells.getHandler(is);
                 if (cellHandler != null) {
                     double power = 1.0;
 
@@ -226,7 +226,7 @@ public class TileChest extends AENetworkPowerTile
         this.updateHandler();
 
         final ItemStack cell = this.getCell();
-        final ICellHandler ch = AEApi.instance().registries().cell().getHandler(cell);
+        final ICellHandler ch = StorageCells.getHandler(cell);
 
         if (this.cellHandler != null && ch != null) {
             return ch.getStatusForCell(cell, this.cellHandler.getInternalHandler());
@@ -508,10 +508,10 @@ public class TileChest extends AENetworkPowerTile
     public boolean openGui(final EntityPlayer p) {
         this.updateHandler();
         if (this.cellHandler != null) {
-            final ICellHandler ch = AEApi.instance().registries().cell().getHandler(this.getCell());
+            final ICellHandler ch = StorageCells.getHandler(this.getCell());
 
             if (ch != null) {
-                final ICellGuiHandler chg = AEApi.instance().registries().cell()
+                final ICellGuiHandler chg = StorageCells
                         .getGuiHandler(this.cellHandler.getChannel(), this.getCell());
                 if (chg != null) {
                     chg.openChestGui(p, this, ch, this.cellHandler, this.getCell(), this.cellHandler.getChannel());
@@ -772,7 +772,7 @@ public class TileChest extends AENetworkPowerTile
 
         @Override
         public boolean allowInsert(IItemHandler inv, int slot, ItemStack stack) {
-            return AEApi.instance().registries().cell().getHandler(stack) != null;
+            return StorageCells.getHandler(stack) != null;
         }
 
     }

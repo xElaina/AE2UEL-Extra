@@ -36,6 +36,7 @@ import net.minecraftforge.common.ForgeHooks;
 import appeng.api.AEApi;
 import appeng.api.definitions.*;
 import appeng.api.storage.IMEInventory;
+import appeng.api.storage.StorageCells;
 import appeng.api.storage.StorageChannels;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.storage.data.IItemList;
@@ -92,10 +93,8 @@ public final class DisassembleRecipe extends net.minecraftforge.registries.IForg
                 if (maybeCellOutput.isPresent()) {
                     ItemStack storageCellStack = maybeCellOutput.get();
                     // make sure the storage cell stackInSlot empty...
-                    final IMEInventory<IAEItemStack> cellInv = AEApi.instance()
-                            .registries()
-                            .cell()
-                            .getCellInventory(stackInSlot, null, StorageChannels.items());
+                    final IMEInventory<IAEItemStack> cellInv = StorageCells.getCellInventory(stackInSlot, null,
+                            StorageChannels.items());
                     if (cellInv != null) {
                         final IItemList<IAEItemStack> list = cellInv
                                 .getAvailableItems(StorageChannels.items().createList());

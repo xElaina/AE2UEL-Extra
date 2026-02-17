@@ -1170,7 +1170,7 @@ public class Platform {
             final IItemList<?> myChanges = chan.createList();
 
             if (!removed.isEmpty()) {
-                final IMEInventory myInv = AEApi.instance().registries().cell().getCellInventory(removed, null, chan);
+                final IMEInventory myInv = StorageCells.getCellInventory(removed, null, chan);
                 if (myInv != null) {
                     myInv.getAvailableItems(myChanges);
                     for (final IAEStack is : myChanges) {
@@ -1179,7 +1179,7 @@ public class Platform {
                 }
             }
             if (!added.isEmpty()) {
-                final IMEInventory myInv = AEApi.instance().registries().cell().getCellInventory(added, null, chan);
+                final IMEInventory myInv = StorageCells.getCellInventory(added, null, chan);
                 if (myInv != null) {
                     myInv.getAvailableItems(myChanges);
                 }
