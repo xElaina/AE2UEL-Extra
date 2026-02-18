@@ -24,8 +24,9 @@ import net.minecraft.item.ItemStack;
 
 import appeng.api.config.Actionable;
 import appeng.api.networking.security.IActionSource;
-import appeng.api.storage.ICellHandler;
-import appeng.api.storage.ICellInventoryHandler;
+import appeng.api.storage.cells.CellState;
+import appeng.api.storage.cells.ICellHandler;
+import appeng.api.storage.cells.ICellInventoryHandler;
 import appeng.api.storage.data.IAEStack;
 import appeng.core.features.registries.cell.CreativeCellHandler;
 import appeng.me.GridAccessException;
@@ -34,7 +35,7 @@ import appeng.tile.storage.TileDrive;
 
 public class DriveWatcher<T extends IAEStack> extends MEInventoryHandler<T> {
 
-    private int oldStatus = 0;
+    private CellState oldStatus = CellState.ABSENT;
     private final ItemStack is;
     private final ICellHandler handler;
     private final TileDrive drive;
@@ -49,7 +50,7 @@ public class DriveWatcher<T extends IAEStack> extends MEInventoryHandler<T> {
         this.source = new MachineSource(drive);
     }
 
-    public int getStatus() {
+    public CellState getStatus() {
         return this.handler.getStatusForCell(this.is, (ICellInventoryHandler) this.getInternal());
     }
 
@@ -60,7 +61,7 @@ public class DriveWatcher<T extends IAEStack> extends MEInventoryHandler<T> {
         final T remainder = super.injectItems(input, type, src);
 
         if (type == Actionable.MODULATE && (remainder == null || remainder.getStackSize() != size)) {
-            final int newStatus = this.getStatus();
+            final CellState newStatus = this.getStatus();
 
             if (newStatus != this.oldStatus) {
                 this.drive.blinkCell(this.getSlot());
@@ -88,7 +89,7 @@ public class DriveWatcher<T extends IAEStack> extends MEInventoryHandler<T> {
         final T extractable = super.extractItems(request, type, src);
 
         if (type == Actionable.MODULATE && extractable != null) {
-            final int newStatus = this.getStatus();
+            final CellState newStatus = this.getStatus();
 
             if (newStatus != this.oldStatus) {
                 this.drive.blinkCell(this.getSlot());

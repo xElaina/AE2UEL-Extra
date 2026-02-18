@@ -21,20 +21,34 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package appeng.api.util;
+package appeng.api.storage.cells;
 
-import java.util.List;
-
-import appeng.api.storage.cells.ICellInventoryHandler;
-import appeng.api.storage.data.IAEStack;
-
-public interface IClientHelper {
+/**
+ * @author yueh
+ */
+public enum CellState {
     /**
-     * Add cell information to the provided list. Used for tooltip content.
-     * 
-     * @param handler Cell handler.
-     * @param lines   List of lines to add to.
+     * No cell at all
      */
-    <T extends IAEStack> void addCellInformation(ICellInventoryHandler<T> handler, List<String> lines);
+    ABSENT,
 
+    /**
+     * A cell without anything stored
+     */
+    EMPTY,
+
+    /**
+     * Stored something, but neither types nor totally full
+     */
+    NOT_EMPTY,
+
+    /**
+     * Available types exhausted
+     */
+    TYPES_FULL,
+
+    /**
+     * Full cell, technically could have free types
+     */
+    FULL
 }

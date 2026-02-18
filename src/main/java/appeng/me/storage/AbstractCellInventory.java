@@ -24,8 +24,9 @@ import net.minecraftforge.items.IItemHandler;
 
 import appeng.api.config.FuzzyMode;
 import appeng.api.implementations.items.IStorageCell;
-import appeng.api.storage.ICellInventory;
-import appeng.api.storage.ISaveProvider;
+import appeng.api.storage.cells.CellState;
+import appeng.api.storage.cells.ICellInventory;
+import appeng.api.storage.cells.ISaveProvider;
 import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemList;
 import appeng.util.Platform;
@@ -291,16 +292,16 @@ public abstract class AbstractCellInventory<T extends IAEStack> implements ICell
     }
 
     @Override
-    public int getStatusForCell() {
+    public CellState getStatusForCell() {
         if (this.getUsedBytes() == 0) {
-            return 4;
+            return CellState.EMPTY;
         }
         if (this.canHoldNewItem()) {
-            return 1;
+            return CellState.NOT_EMPTY;
         }
         if (this.getRemainingItemCount() > 0) {
-            return 2;
+            return CellState.TYPES_FULL;
         }
-        return 3;
+        return CellState.FULL;
     }
 }

@@ -57,6 +57,7 @@ import appeng.api.networking.security.ISecurityGrid;
 import appeng.api.networking.storage.IBaseMonitor;
 import appeng.api.networking.storage.IStorageGrid;
 import appeng.api.storage.*;
+import appeng.api.storage.cells.*;
 import appeng.api.storage.data.IAEFluidStack;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.storage.data.IAEStack;
@@ -142,7 +143,7 @@ public class TileChest extends AENetworkPowerTile
         final boolean oldPowered = this.powered;
 
         for (int x = 0; x < this.getCellCount(); x++) {
-            this.cellState |= (this.getCellStatus(x) << (3 * x));
+            this.cellState |= (this.getCellStatus(x).ordinal() << (3 * x));
         }
 
         this.powered = this.isPowered();
@@ -218,9 +219,9 @@ public class TileChest extends AENetworkPowerTile
     }
 
     @Override
-    public int getCellStatus(final int slot) {
+    public CellState getCellStatus(final int slot) {
         if (Platform.isClient()) {
-            return (this.cellState >> (slot * 3)) & 0b111;
+            return CellState.values()[(this.cellState >> (slot * 3)) & 0b111];
         }
 
         this.updateHandler();
@@ -232,7 +233,7 @@ public class TileChest extends AENetworkPowerTile
             return ch.getStatusForCell(cell, this.cellHandler.getInternalHandler());
         }
 
-        return 0;
+        return CellState.ABSENT;
     }
 
     @Override
@@ -324,7 +325,7 @@ public class TileChest extends AENetworkPowerTile
         }
 
         for (int x = 0; x < this.getCellCount(); x++) {
-            this.cellState |= (this.getCellStatus(x) << (3 * x));
+            this.cellState |= (this.getCellStatus(x).ordinal() << (3 * x));
         }
 
         this.powered = this.isPowered();

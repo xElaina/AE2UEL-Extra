@@ -6,6 +6,8 @@ import net.minecraft.tileentity.TileEntity;
 
 import appeng.api.implementations.tiles.IChestOrDrive;
 import appeng.api.storage.*;
+import appeng.api.storage.cells.ICellGuiHandler;
+import appeng.api.storage.cells.ICellHandler;
 import appeng.api.storage.data.IAEStack;
 import appeng.api.util.AEPartLocation;
 import appeng.core.sync.GuiBridge;

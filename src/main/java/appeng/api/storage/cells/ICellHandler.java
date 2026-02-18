@@ -21,10 +21,11 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package appeng.api.storage;
+package appeng.api.storage.cells;
 
 import net.minecraft.item.ItemStack;
 
+import appeng.api.storage.IStorageChannel;
 import appeng.api.storage.data.IAEStack;
 
 /**
@@ -70,17 +71,17 @@ public interface ICellHandler {
      *
      * @return get the status of the cell based on its contents.
      */
-    default <T extends IAEStack> int getStatusForCell(ItemStack is, ICellInventoryHandler<T> handler) {
+    default <T extends IAEStack> CellState getStatusForCell(ItemStack is, ICellInventoryHandler<T> handler) {
         if (handler.getCellInv() != null) {
-            int val = handler.getCellInv().getStatusForCell();
+            CellState val = handler.getCellInv().getStatusForCell();
 
-            if (val == 1 && handler.isPreformatted()) {
-                val = 2;
+            if (val == CellState.NOT_EMPTY && handler.isPreformatted()) {
+                return CellState.TYPES_FULL;
             }
 
             return val;
         }
-        return 0;
+        return CellState.ABSENT;
     }
 
     /**

@@ -29,6 +29,8 @@ import net.minecraftforge.items.IItemHandler;
 
 import appeng.api.config.FuzzyMode;
 import appeng.api.storage.*;
+import appeng.api.storage.cells.ICellInventoryHandler;
+import appeng.api.storage.cells.ICellWorkbenchItem;
 import appeng.items.AEBaseItem;
 import appeng.items.contents.CellConfig;
 

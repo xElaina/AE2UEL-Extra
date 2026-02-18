@@ -19,6 +19,7 @@
 package appeng.block.storage;
 
 import appeng.api.implementations.tiles.IChestOrDrive;
+import appeng.api.storage.cells.CellState;
 
 /**
  * Contains the full information about what the state of the slots in a BlockDrive is.
@@ -49,7 +50,8 @@ public class DriveSlotsState {
         DriveSlotState[] slots = new DriveSlotState[chestOrDrive.getCellCount()];
         for (int i = 0; i < chestOrDrive.getCellCount(); i++) {
             if (!chestOrDrive.isPowered()) {
-                if (chestOrDrive.getCellStatus(i) != 0) {
+                CellState status = chestOrDrive.getCellStatus(i);
+                if (status != CellState.ABSENT) {
                     slots[i] = DriveSlotState.OFFLINE;
                 } else {
                     slots[i] = DriveSlotState.EMPTY;

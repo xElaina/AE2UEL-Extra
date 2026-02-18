@@ -16,9 +16,9 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import appeng.api.config.IncludeExclude;
 import appeng.api.storage.FluidStorageChannel;
-import appeng.api.storage.ICellInventory;
-import appeng.api.storage.ICellInventoryHandler;
 import appeng.api.storage.ItemStorageChannel;
+import appeng.api.storage.cells.ICellInventory;
+import appeng.api.storage.cells.ICellInventoryHandler;
 import appeng.api.storage.data.IAEFluidStack;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.storage.data.IAEStack;

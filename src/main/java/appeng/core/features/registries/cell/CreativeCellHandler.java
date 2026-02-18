@@ -21,6 +21,10 @@ package appeng.core.features.registries.cell;
 import net.minecraft.item.ItemStack;
 
 import appeng.api.storage.*;
+import appeng.api.storage.cells.CellState;
+import appeng.api.storage.cells.ICellHandler;
+import appeng.api.storage.cells.ICellInventoryHandler;
+import appeng.api.storage.cells.ISaveProvider;
 import appeng.items.storage.ItemCreativeStorageCell;
 import appeng.me.storage.CreativeCellInventory;
 
@@ -42,8 +46,8 @@ public final class CreativeCellHandler implements ICellHandler {
     }
 
     @Override
-    public int getStatusForCell(final ItemStack is, final ICellInventoryHandler handler) {
-        return 2;
+    public CellState getStatusForCell(final ItemStack is, final ICellInventoryHandler handler) {
+        return CellState.TYPES_FULL;
     }
 
     @Override

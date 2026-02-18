@@ -33,6 +33,7 @@ import appeng.api.config.FuzzyMode;
 import appeng.api.config.Settings;
 import appeng.api.implementations.items.IStorageCell;
 import appeng.api.storage.*;
+import appeng.api.storage.cells.ICellWorkbenchItem;
 import appeng.api.storage.data.IAEStack;
 import appeng.api.storage.data.IItemList;
 import appeng.container.guisync.GuiSync;

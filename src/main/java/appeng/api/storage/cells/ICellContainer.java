@@ -21,26 +21,19 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package appeng.api.storage;
+package appeng.api.storage.cells;
 
-import javax.annotation.Nullable;
+import appeng.api.networking.security.IActionHost;
 
-import appeng.api.config.IncludeExclude;
-import appeng.api.storage.data.IAEStack;
-
-public interface ICellInventoryHandler<T extends IAEStack> extends IMEInventoryHandler<T> {
+/**
+ * Represents an {@link appeng.api.networking.IGridHost} that contributes to storage, such as a ME Chest, or ME Drive.
+ */
+public interface ICellContainer extends IActionHost, ICellProvider, ISaveProvider {
 
     /**
-     * Get access to the ICellInventory. Can be null for custom cells.
-     * 
-     * @return get access to the Cell Inventory.
+     * tell the Cell container that this slot should blink, the slot number is relative to the
+     *
+     * @param slot slot index
      */
-    @Nullable
-    ICellInventory<T> getCellInv();
-
-    boolean isPreformatted();
-
-    boolean isFuzzy();
-
-    IncludeExclude getIncludeExcludeMode();
+    void blinkCell(int slot);
 }

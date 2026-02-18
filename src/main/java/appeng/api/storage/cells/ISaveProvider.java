@@ -21,32 +21,19 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package appeng.api.storage;
+package appeng.api.storage.cells;
 
-import java.util.List;
-
-import appeng.api.networking.IGridNodeService;
+import javax.annotation.Nullable;
 
 /**
- * Allows you to provide cells via non IGridHosts directly to the storage system, drives, and similar features should go
- * though {@link ICellContainer} and be automatically handled by the storage system.
+ * Tells the cell provider that changes have been made an the cell must be persisted
+ *
  */
-public interface ICellProvider extends IGridNodeService {
-
+public interface ISaveProvider {
     /**
-     * Inventory of the tile for use with ME, should always return an valid list, never NULL.
-     *
-     * You must return the correct Handler for the correct channel, if your handler returns a IAEItemStack handler, for
-     * a Fluid Channel stuffs going to explode, same with the reverse.
-     *
-     * @return a valid list of handlers, NEVER NULL
+     * Cell has changed and needs to be changed.
+     * 
+     * @param cellInventory can be null for custom cells.
      */
-    List<IMEInventoryHandler> getCellArray(IStorageChannel<?> channel);
-
-    /**
-     * the storage's priority.
-     *
-     * Positive and negative are supported
-     */
-    int getPriority();
+    void saveChanges(@Nullable ICellInventory<?> cellInventory);
 }

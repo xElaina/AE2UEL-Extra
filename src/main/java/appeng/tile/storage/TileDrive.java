@@ -37,6 +37,10 @@ import appeng.api.networking.events.MENetworkPowerStatusChange;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.networking.storage.IStorageGrid;
 import appeng.api.storage.*;
+import appeng.api.storage.cells.CellState;
+import appeng.api.storage.cells.ICellHandler;
+import appeng.api.storage.cells.ICellInventory;
+import appeng.api.storage.cells.ICellInventoryHandler;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.storage.data.IAEStack;
 import appeng.api.util.AECableType;
@@ -89,7 +93,7 @@ public class TileDrive extends AENetworkInvTile implements IChestOrDrive, IPrior
 
         int newState = 0;
         for (int x = 0; x < this.getCellCount(); x++) {
-            newState |= (this.getCellStatus(x) << (3 * x));
+            newState |= (this.getCellStatus(x).ordinal() << (3 * x));
         }
 
         data.writeInt(newState);
@@ -115,14 +119,14 @@ public class TileDrive extends AENetworkInvTile implements IChestOrDrive, IPrior
     }
 
     @Override
-    public int getCellStatus(final int slot) {
+    public CellState getCellStatus(final int slot) {
         if (Platform.isClient()) {
-            return (this.cellState >> (slot * 3)) & 0b111;
+            return CellState.values()[(this.cellState >> (slot * 3)) & 0b111];
         }
 
         final DriveWatcher handler = this.invBySlot[slot];
         if (handler == null) {
-            return 0;
+            return CellState.ABSENT;
         }
 
         return handler.getStatus();
@@ -178,7 +182,7 @@ public class TileDrive extends AENetworkInvTile implements IChestOrDrive, IPrior
         }
 
         for (int x = 0; x < this.getCellCount(); x++) {
-            cellState |= (this.getCellStatus(x) << (3 * x));
+            cellState |= (this.getCellStatus(x).ordinal() << (3 * x));
         }
 
         if (oldCellState != this.cellState || oldPowered != this.powered) {
